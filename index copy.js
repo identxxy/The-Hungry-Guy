@@ -19,8 +19,14 @@ import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detec
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-cpu';
+
+import * as tfjsWasm from '@tensorflow/tfjs-backend-wasm';
 
 import {TRIANGULATION} from './triangulation';
+
+tfjsWasm.setWasmPaths(
+    `https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@${tfjsWasm.version_wasm}/dist/`);
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -52,15 +58,8 @@ function drawPath(ctx, points, closePath) {
   ctx.stroke(region);
 }
 
-let model, videoWidth, videoHeight, video, rafID, cube;
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-
-const lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+let model, ctx, videoWidth, videoHeight, video, canvas,
+    scatterGLHasInitialized = false, scatterGL, rafID;
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
@@ -75,8 +74,19 @@ const state = {
   predictIrises: true
 };
 
+if (renderPointcloud) {
+  state.renderPointcloud = true;
+}
+
 function setupDatGui() {
   const gui = new dat.GUI();
+  gui.add(state, 'backend', ['webgl', 'wasm', 'cpu'])
+      .onChange(async backend => {
+        window.cancelAnimationFrame(rafID);
+        await tf.setBackend(backend);
+        requestAnimationFrame(renderPrediction);
+      });
+
   gui.add(state, 'maxFaces', 1, 20, 1).onChange(async val => {
     model = await faceLandmarksDetection.load(
       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
@@ -86,6 +96,12 @@ function setupDatGui() {
   gui.add(state, 'triangulateMesh');
   gui.add(state, 'predictIrises');
 
+  if (renderPointcloud) {
+    gui.add(state, 'renderPointcloud').onChange(render => {
+      document.querySelector('#scatter-gl-container').style.display =
+          render ? 'inline-block' : 'none';
+    });
+  }
 }
 
 async function setupCamera() {
@@ -119,6 +135,8 @@ async function renderPrediction() {
     flipHorizontal: false,
     predictIrises: state.predictIrises
   });
+  ctx.drawImage(
+      video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
 
   if (predictions.length > 0) {
     predictions.forEach(prediction => {
@@ -181,46 +199,39 @@ async function renderPrediction() {
       }
     });
 
-    // if (renderPointcloud && state.renderPointcloud && scatterGL != null) {
-    //   const pointsData = predictions.map(prediction => {
-    //     let scaledMesh = prediction.scaledMesh;
-    //     return scaledMesh.map(point => ([-point[0], -point[1], -point[2]]));
-    //   });
+    if (renderPointcloud && state.renderPointcloud && scatterGL != null) {
+      const pointsData = predictions.map(prediction => {
+        let scaledMesh = prediction.scaledMesh;
+        return scaledMesh.map(point => ([-point[0], -point[1], -point[2]]));
+      });
 
-    //   let flattenedPointsData = [];
-    //   for (let i = 0; i < pointsData.length; i++) {
-    //     flattenedPointsData = flattenedPointsData.concat(pointsData[i]);
-    //   }
-    //   const dataset = new ScatterGL.Dataset(flattenedPointsData);
+      let flattenedPointsData = [];
+      for (let i = 0; i < pointsData.length; i++) {
+        flattenedPointsData = flattenedPointsData.concat(pointsData[i]);
+      }
+      const dataset = new ScatterGL.Dataset(flattenedPointsData);
 
-    //   if (!scatterGLHasInitialized) {
-    //     scatterGL.setPointColorer((i) => {
-    //       if(i % (NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS * 2) > NUM_KEYPOINTS) {
-    //         return RED;
-    //       }
-    //       return BLUE;
-    //     });
-    //     scatterGL.render(dataset);
-    //   } else {
-    //     scatterGL.updateDataset(dataset);
-    //   }
-    //   scatterGLHasInitialized = true;
-    // }
+      if (!scatterGLHasInitialized) {
+        scatterGL.setPointColorer((i) => {
+          if(i % (NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS * 2) > NUM_KEYPOINTS) {
+            return RED;
+          }
+          return BLUE;
+        });
+        scatterGL.render(dataset);
+      } else {
+        scatterGL.updateDataset(dataset);
+      }
+      scatterGLHasInitialized = true;
+    }
   }
 
   stats.end();
   rafID = requestAnimationFrame(renderPrediction);
 };
 
-function animate() {
-	rafID = requestAnimationFrame( animate );
-  cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
-	renderer.render( scene, camera );
-}
-
 async function main() {
-  // await tf.setBackend(state.backend);
+  await tf.setBackend(state.backend);
   setupDatGui();
 
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -233,18 +244,32 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  const geometry = new THREE.BoxGeometry();
-  const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  cube = new THREE.Mesh( geometry, material );
-  scene.add( cube );
-  camera.position.z = 10;
+  canvas = document.getElementById('output');
+  canvas.width = videoWidth;
+  canvas.height = videoHeight;
+  const canvasContainer = document.querySelector('.canvas-wrapper');
+  canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
 
-  // model = await faceLandmarksDetection.load(
-  //   faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-  //   {maxFaces: state.maxFaces});
-  // renderPrediction();
-  animate();
+  ctx = canvas.getContext('2d');
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  ctx.fillStyle = GREEN;
+  ctx.strokeStyle = GREEN;
+  ctx.lineWidth = 0.5;
 
+  model = await faceLandmarksDetection.load(
+    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+    {maxFaces: state.maxFaces});
+  renderPrediction();
+
+  if (renderPointcloud) {
+    document.querySelector('#scatter-gl-container').style =
+        `width: ${VIDEO_SIZE}px; height: ${VIDEO_SIZE}px;`;
+
+    scatterGL = new ScatterGL(
+        document.querySelector('#scatter-gl-container'),
+        {'rotateOnStart': false, 'selectEnabled': false});
+  }
 };
 
 main();
