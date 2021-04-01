@@ -37,24 +37,6 @@ function isMobile() {
   return isAndroid || isiOS;
 }
 
-function distance(a, b) {
-  return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
-}
-
-function drawPath(ctx, points, closePath) {
-  const region = new Path2D();
-  region.moveTo(points[0][0], points[0][1]);
-  for (let i = 1; i < points.length; i++) {
-    const point = points[i];
-    region.lineTo(point[0], point[1]);
-  }
-
-  if (closePath) {
-    region.closePath();
-  }
-  ctx.stroke(region);
-}
-
 let model, videoWidth, videoHeight, video, rafID, cube, faceMesh;
 
 const scene = new THREE.Scene();
