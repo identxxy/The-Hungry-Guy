@@ -58,11 +58,11 @@ function drawPath(ctx, points, closePath) {
 let model, videoWidth, videoHeight, video, rafID, cube, faceMesh;
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 2000 );
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-const faceMaterial = new THREE.PointsMaterial( { color: 0xffffff, size: 10 } );
+const faceMaterial = new THREE.PointsMaterial( { color: 0xffffff, size: 5 } );
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
@@ -130,107 +130,17 @@ async function renderPrediction() {
     faceMesh.geometry = geometry;
   }
 
-  //   predictions.forEach(prediction => {
-  //     const keypoints = prediction.scaledMesh;
-
-  //     if (state.triangulateMesh) {
-  //       ctx.strokeStyle = GREEN;
-  //       ctx.lineWidth = 0.5;
-
-  //       for (let i = 0; i < TRIANGULATION.length / 3; i++) {
-  //         const points = [
-  //           TRIANGULATION[i * 3], TRIANGULATION[i * 3 + 1],
-  //           TRIANGULATION[i * 3 + 2]
-  //         ].map(index => keypoints[index]);
-
-  //         drawPath(ctx, points, true);
-  //       }
-  //     } else {
-  //       ctx.fillStyle = GREEN;
-
-  //       for (let i = 0; i < NUM_KEYPOINTS; i++) {
-  //         const x = keypoints[i][0];
-  //         const y = keypoints[i][1];
-
-  //         ctx.beginPath();
-  //         ctx.arc(x, y, 1 /* radius */, 0, 2 * Math.PI);
-  //         ctx.fill();
-  //       }
-  //     }
-
-  //     if(keypoints.length > NUM_KEYPOINTS) {
-  //       ctx.strokeStyle = RED;
-  //       ctx.lineWidth = 1;
-
-  //       const leftCenter = keypoints[NUM_KEYPOINTS];
-  //       const leftDiameterY = distance(
-  //         keypoints[NUM_KEYPOINTS + 4],
-  //         keypoints[NUM_KEYPOINTS + 2]);
-  //       const leftDiameterX = distance(
-  //         keypoints[NUM_KEYPOINTS + 3],
-  //         keypoints[NUM_KEYPOINTS + 1]);
-
-  //       ctx.beginPath();
-  //       ctx.ellipse(leftCenter[0], leftCenter[1], leftDiameterX / 2, leftDiameterY / 2, 0, 0, 2 * Math.PI);
-  //       ctx.stroke();
-
-  //       if(keypoints.length > NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS) {
-  //         const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
-  //         const rightDiameterY = distance(
-  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 2],
-  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 4]);
-  //         const rightDiameterX = distance(
-  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 3],
-  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 1]);
-
-  //         ctx.beginPath();
-  //         ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
-  //         ctx.stroke();
-  //       }
-  //     }
-  //   });
-
-    // if (renderPointcloud && state.renderPointcloud && scatterGL != null) {
-    //   const pointsData = predictions.map(prediction => {
-    //     let scaledMesh = prediction.scaledMesh;
-    //     return scaledMesh.map(point => ([-point[0], -point[1], -point[2]]));
-    //   });
-
-    //   let flattenedPointsData = [];
-    //   for (let i = 0; i < pointsData.length; i++) {
-    //     flattenedPointsData = flattenedPointsData.concat(pointsData[i]);
-    //   }
-    //   const dataset = new ScatterGL.Dataset(flattenedPointsData);
-
-    //   if (!scatterGLHasInitialized) {
-    //     scatterGL.setPointColorer((i) => {
-    //       if(i % (NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS * 2) > NUM_KEYPOINTS) {
-    //         return RED;
-    //       }
-    //       return BLUE;
-    //     });
-    //     scatterGL.render(dataset);
-    //   } else {
-    //     scatterGL.updateDataset(dataset);
-    //   }
-    //   scatterGLHasInitialized = true;
-    // }
-  // }
-
   stats.end();
-  // rafID = requestAnimationFrame(renderPrediction);
 };
 
 function animate() {
-  // cube.rotation.x += 0.01;
-	// cube.rotation.y += 0.01;
   renderPrediction();
 	renderer.render( scene, camera );
 	rafID = requestAnimationFrame( animate );
 }
 
 async function main() {
-  // await tf.setBackend(state.backend);
+  await tf.setBackend(state.backend);
   setupDatGui();
 
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -243,22 +153,18 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  // const boxgeometry = new THREE.BoxGeometry();
-  // const boxmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  // cube = new THREE.Mesh( boxgeometry, boxmaterial );
-  // scene.add( cube );
-  camera.position.z = 500;
-  camera.rotateZ(3.1415926);
+  camera.position.z = 1000;
 
   model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
     {maxFaces: state.maxFaces});
 
   faceMesh = new THREE.Points( new THREE.BufferGeometry().setFromPoints([]), faceMaterial );
+  faceMesh.rotateZ(3.1415926);
+  faceMesh.position.x = videoWidth / 2;
+  faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 
-
-  // renderPrediction();
   animate();
 
 };
