@@ -19,8 +19,11 @@ import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detec
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-cpu';
 
 import {TRIANGULATION} from './triangulation';
+
+import * as THREE from 'three'
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -52,15 +55,14 @@ function drawPath(ctx, points, closePath) {
   ctx.stroke(region);
 }
 
-let model, videoWidth, videoHeight, video, rafID, cube;
+let model, videoWidth, videoHeight, video, rafID, cube, faceMesh;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-
-const lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+const faceMaterial = new THREE.PointsMaterial( { color: 0xffffff, size: 10 } );
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
@@ -121,65 +123,72 @@ async function renderPrediction() {
   });
 
   if (predictions.length > 0) {
-    predictions.forEach(prediction => {
-      const keypoints = prediction.scaledMesh;
+    faceMesh.geometry.dispose();
+    const geometry = new THREE.BufferGeometry();
+    const points = new Float32Array(predictions[0].scaledMesh.flat());
+    geometry.setAttribute( 'position', new THREE.BufferAttribute( points, 3 ) );
+    faceMesh.geometry = geometry;
+  }
 
-      if (state.triangulateMesh) {
-        ctx.strokeStyle = GREEN;
-        ctx.lineWidth = 0.5;
+  //   predictions.forEach(prediction => {
+  //     const keypoints = prediction.scaledMesh;
 
-        for (let i = 0; i < TRIANGULATION.length / 3; i++) {
-          const points = [
-            TRIANGULATION[i * 3], TRIANGULATION[i * 3 + 1],
-            TRIANGULATION[i * 3 + 2]
-          ].map(index => keypoints[index]);
+  //     if (state.triangulateMesh) {
+  //       ctx.strokeStyle = GREEN;
+  //       ctx.lineWidth = 0.5;
 
-          drawPath(ctx, points, true);
-        }
-      } else {
-        ctx.fillStyle = GREEN;
+  //       for (let i = 0; i < TRIANGULATION.length / 3; i++) {
+  //         const points = [
+  //           TRIANGULATION[i * 3], TRIANGULATION[i * 3 + 1],
+  //           TRIANGULATION[i * 3 + 2]
+  //         ].map(index => keypoints[index]);
 
-        for (let i = 0; i < NUM_KEYPOINTS; i++) {
-          const x = keypoints[i][0];
-          const y = keypoints[i][1];
+  //         drawPath(ctx, points, true);
+  //       }
+  //     } else {
+  //       ctx.fillStyle = GREEN;
 
-          ctx.beginPath();
-          ctx.arc(x, y, 1 /* radius */, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-      }
+  //       for (let i = 0; i < NUM_KEYPOINTS; i++) {
+  //         const x = keypoints[i][0];
+  //         const y = keypoints[i][1];
 
-      if(keypoints.length > NUM_KEYPOINTS) {
-        ctx.strokeStyle = RED;
-        ctx.lineWidth = 1;
+  //         ctx.beginPath();
+  //         ctx.arc(x, y, 1 /* radius */, 0, 2 * Math.PI);
+  //         ctx.fill();
+  //       }
+  //     }
 
-        const leftCenter = keypoints[NUM_KEYPOINTS];
-        const leftDiameterY = distance(
-          keypoints[NUM_KEYPOINTS + 4],
-          keypoints[NUM_KEYPOINTS + 2]);
-        const leftDiameterX = distance(
-          keypoints[NUM_KEYPOINTS + 3],
-          keypoints[NUM_KEYPOINTS + 1]);
+  //     if(keypoints.length > NUM_KEYPOINTS) {
+  //       ctx.strokeStyle = RED;
+  //       ctx.lineWidth = 1;
 
-        ctx.beginPath();
-        ctx.ellipse(leftCenter[0], leftCenter[1], leftDiameterX / 2, leftDiameterY / 2, 0, 0, 2 * Math.PI);
-        ctx.stroke();
+  //       const leftCenter = keypoints[NUM_KEYPOINTS];
+  //       const leftDiameterY = distance(
+  //         keypoints[NUM_KEYPOINTS + 4],
+  //         keypoints[NUM_KEYPOINTS + 2]);
+  //       const leftDiameterX = distance(
+  //         keypoints[NUM_KEYPOINTS + 3],
+  //         keypoints[NUM_KEYPOINTS + 1]);
 
-        if(keypoints.length > NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS) {
-          const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
-          const rightDiameterY = distance(
-            keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 2],
-            keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 4]);
-          const rightDiameterX = distance(
-            keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 3],
-            keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 1]);
+  //       ctx.beginPath();
+  //       ctx.ellipse(leftCenter[0], leftCenter[1], leftDiameterX / 2, leftDiameterY / 2, 0, 0, 2 * Math.PI);
+  //       ctx.stroke();
 
-          ctx.beginPath();
-          ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
-          ctx.stroke();
-        }
-      }
-    });
+  //       if(keypoints.length > NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS) {
+  //         const rightCenter = keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS];
+  //         const rightDiameterY = distance(
+  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 2],
+  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 4]);
+  //         const rightDiameterX = distance(
+  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 3],
+  //           keypoints[NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS + 1]);
+
+  //         ctx.beginPath();
+  //         ctx.ellipse(rightCenter[0], rightCenter[1], rightDiameterX / 2, rightDiameterY / 2, 0, 0, 2 * Math.PI);
+  //         ctx.stroke();
+  //       }
+  //     }
+  //   });
 
     // if (renderPointcloud && state.renderPointcloud && scatterGL != null) {
     //   const pointsData = predictions.map(prediction => {
@@ -206,17 +215,18 @@ async function renderPrediction() {
     //   }
     //   scatterGLHasInitialized = true;
     // }
-  }
+  // }
 
   stats.end();
-  rafID = requestAnimationFrame(renderPrediction);
+  // rafID = requestAnimationFrame(renderPrediction);
 };
 
 function animate() {
-	rafID = requestAnimationFrame( animate );
-  cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
+  // cube.rotation.x += 0.01;
+	// cube.rotation.y += 0.01;
+  renderPrediction();
 	renderer.render( scene, camera );
+	rafID = requestAnimationFrame( animate );
 }
 
 async function main() {
@@ -233,15 +243,21 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  const geometry = new THREE.BoxGeometry();
-  const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  cube = new THREE.Mesh( geometry, material );
-  scene.add( cube );
-  camera.position.z = 10;
+  // const boxgeometry = new THREE.BoxGeometry();
+  // const boxmaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  // cube = new THREE.Mesh( boxgeometry, boxmaterial );
+  // scene.add( cube );
+  camera.position.z = 500;
+  camera.rotateZ(3.1415926);
 
-  // model = await faceLandmarksDetection.load(
-  //   faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-  //   {maxFaces: state.maxFaces});
+  model = await faceLandmarksDetection.load(
+    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+    {maxFaces: state.maxFaces});
+
+  faceMesh = new THREE.Points( new THREE.BufferGeometry().setFromPoints([]), faceMaterial );
+  scene.add(faceMesh);
+
+
   // renderPrediction();
   animate();
 
