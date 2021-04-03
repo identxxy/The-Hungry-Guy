@@ -52,6 +52,7 @@ const stats = new Stats();
 const state = {
   backend: 'webgl',
   maxFaces: 1,
+  debug: false,
 };
 
 function setupDatGui() {
@@ -62,8 +63,9 @@ function setupDatGui() {
       { maxFaces: val });
   });
 
-  const obj = { Start: function () { console.log("clicked"); gameReset();} };
-  gui.add(obj, 'Start');;
+  gui.add(state, 'debug');
+  const obj = { Start: function () { console.log("game start!"); gameReset(scene); } };
+  gui.add(obj, 'Start');
 }
 
 async function setupCamera() {
@@ -89,7 +91,6 @@ async function setupCamera() {
 }
 
 async function renderPrediction() {
-  stats.begin();
 
   const predictions = await model.estimateFaces({
     input: video,
@@ -104,20 +105,37 @@ async function renderPrediction() {
     const points = new Float32Array(predictions[0].scaledMesh.flat());
     geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
     faceMesh.geometry = geometry;
-    return {
-      lipsUpper: predictions[0].annotations.lipsUpperInner,
-      lipsLower: predictions[0].annotations.lipsLowerInner,
+    const annotation = predictions[0].annotations;
+    const up = annotation.lipsUpperInner[5];
+      up[0] = videoWidth / 2 - up[0];
+      up[1] = videoHeight / 2 - up[1];
+    const low = annotation.lipsLowerInner[5];
+      low[0] = videoWidth / 2 - low[0];
+      low[1] = videoHeight / 2 - low[1];
+    const left = annotation.lipsLowerInner[10];
+      left[0] = videoWidth / 2 - left[0];
+      left[1] = videoHeight / 2 - left[1];
+    const right = annotation.lipsLowerInner[0];
+      right[0] = videoWidth / 2 - right[0];
+      right[1] = videoHeight / 2 - right[1];
+    const mouth = {
+      up: up,
+      low: low,
+      left: left,
+      right: right
     }
+    return mouth;
   }
-
-  stats.end();
-  return { lipsUpper: null, lipsLower: null };
+  faceMesh.geometry.dispose();
+  faceMesh.geometry = new THREE.BufferGeometry().setFromPoints([]);
 };
 
-function animate() {
-  let mouth = renderPrediction();
-  gameLogic(scene, mouth);
+async function animate() {
+  stats.begin();
+  const mouth = await renderPrediction();
+  gameLogic(scene, mouth, state);
   renderer.render(scene, camera);
+  stats.end();
   rafID = requestAnimationFrame(animate);
 }
 
