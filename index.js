@@ -25,10 +25,7 @@ import { TRIANGULATION } from './triangulation';
 
 import * as THREE from 'three';
 
-import { GameObject } from './object';
-import { OBJSPAWNTIME, OBJSPAWNPOS } from './logic';
-let iPos = 0;
-let iTime = 0;
+import { gameLogic } from './logic';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -49,8 +46,6 @@ const faceMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 5 });
 
 // time
 let startTime;
-// obeject
-let objects = [];
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
@@ -116,39 +111,14 @@ async function renderPrediction() {
       geometry.setAttribute( 'position', new THREE.BufferAttribute( points, 3 ) );
       faceMesh.geometry = geometry;
     }
-
   }
-
   stats.end();
   return { mX: 0, mY: 0, mStatus: 0 };
 };
 
-function gameLogic(timeElasped, mouth) {
-  console.log('time gone: ', timeElasped);
-  // delete objs
-  for (let i = 0; i < objects.length; ++i) {
-    if (timeElasped - objects[i].birthtime > objects[i].lifetime) {
-      scene.remove(objects[i]);
-      objects.splice(i, 1);
-    }
-  }
-  // spawn objs
-  if (timeElasped > OBJSPAWNTIME[iTime]) {
-    let pos = OBJSPAWNPOS[iPos];
-    iTime++;
-    iPos++;
-    const obj = new GameObject("box", true, timeElasped);
-    obj.position.x = pos[0];
-    obj.position.y = pos[1];
-    obj.position.z = pos[2];
-    scene.add(obj);
-    objects.push(obj);
-  }
-}
-
 function animate() {
   let mouth = renderPrediction();
-  gameLogic(new Date().getTime() - startTime, mouth);
+  gameLogic(scene, new Date().getTime() - startTime, mouth);
   renderer.render(scene, camera);
   rafID = requestAnimationFrame(animate);
 }
