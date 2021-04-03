@@ -1,3 +1,4 @@
+import { getColorMatrixTextureShapeWidthHeight } from '@tensorflow/tfjs-backend-webgl/dist/tex_util';
 import { GameObject } from './object';
 
 const OBJSPAWNTIME = [
@@ -10,11 +11,22 @@ const OBJSPAWNPOS = [
     [100, 100, 100],
 ];
 
-let objects = [];
-let iPos = 0;
-let iTime = 0;
+let objects;
+let iPos;
+let iTime;
 
-export function gameLogic(scene, timeElasped, mouth) {
+let startTime;
+
+export function gameReset(){
+  objects = [];
+  iPos = 0;
+  iTime = 0;
+  startTime = new Date().getTime();
+}
+
+export function gameLogic(scene, mouth) {
+  if (!startTime) return;
+  let timeElasped = new Date().getTime() - startTime;
   console.log('time gone: ', timeElasped);
   // delete objs
   for (let i = 0; i < objects.length; ++i) {

@@ -25,7 +25,7 @@ import { TRIANGULATION } from './triangulation';
 
 import * as THREE from 'three';
 
-import { gameLogic } from './logic';
+import { gameLogic, gameReset } from './logic';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -44,9 +44,6 @@ const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 const faceMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 5 });
 
-// time
-let startTime;
-
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
 // Don't render the point cloud on mobile in order to maximize performance and
@@ -55,7 +52,6 @@ const stats = new Stats();
 const state = {
   backend: 'webgl',
   maxFaces: 1,
-  detection: false
 };
 
 function setupDatGui() {
@@ -66,8 +62,8 @@ function setupDatGui() {
       { maxFaces: val });
   });
 
-  gui.add(state, 'detection');
-
+  const obj = { Start: function () { console.log("clicked"); gameReset();} };
+  gui.add(obj, 'Start');;
 }
 
 async function setupCamera() {
@@ -95,30 +91,32 @@ async function setupCamera() {
 async function renderPrediction() {
   stats.begin();
 
-  if (state.detection) {
+  const predictions = await model.estimateFaces({
+    input: video,
+    returnTensors: false,
+    flipHorizontal: false,
+    predictIrises: true
+  });
 
-    const predictions = await model.estimateFaces({
-      input: video,
-      returnTensors: false,
-      flipHorizontal: false,
-      predictIrises: true
-    });
-
-    if (predictions.length > 0) {
-      faceMesh.geometry.dispose();
-      const geometry = new THREE.BufferGeometry();
-      const points = new Float32Array(predictions[0].scaledMesh.flat());
-      geometry.setAttribute( 'position', new THREE.BufferAttribute( points, 3 ) );
-      faceMesh.geometry = geometry;
+  if (predictions.length > 0) {
+    faceMesh.geometry.dispose();
+    const geometry = new THREE.BufferGeometry();
+    const points = new Float32Array(predictions[0].scaledMesh.flat());
+    geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
+    faceMesh.geometry = geometry;
+    return {
+      lipsUpper: predictions[0].annotations.lipsUpperInner,
+      lipsLower: predictions[0].annotations.lipsLowerInner,
     }
   }
+
   stats.end();
-  return { mX: 0, mY: 0, mStatus: 0 };
+  return { lipsUpper: null, lipsLower: null };
 };
 
 function animate() {
   let mouth = renderPrediction();
-  gameLogic(scene, new Date().getTime() - startTime, mouth);
+  gameLogic(scene, mouth);
   renderer.render(scene, camera);
   rafID = requestAnimationFrame(animate);
 }
@@ -149,7 +147,6 @@ async function main() {
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 
-  startTime = new Date().getTime();
   animate();
 
 };
