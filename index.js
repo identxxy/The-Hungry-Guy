@@ -21,15 +21,17 @@ import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
 
-import {TRIANGULATION} from './triangulation';
+import { TRIANGULATION } from './triangulation';
 
-import * as THREE from 'three'
+import * as THREE from 'three';
+
+import { GameObject } from './object';
+import { OBJSPAWNTIME, OBJSPAWNPOS } from './logic';
+let iPos = 0;
+let iTime = 0;
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
-const GREEN = '#32EEDB';
-const RED = "#FF2C35";
-const BLUE = "#157AB3";
 
 function isMobile() {
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -37,26 +39,28 @@ function isMobile() {
   return isAndroid || isiOS;
 }
 
-let model, videoWidth, videoHeight, video, rafID, cube, faceMesh;
-
+let model, videoWidth, videoHeight, video, rafID, faceMesh;
+// three.js settings
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 2000 );
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-const faceMaterial = new THREE.PointsMaterial( { color: 0xffffff, size: 5 } );
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas });
+renderer.setSize(window.innerWidth, window.innerHeight);
+const faceMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 5 });
+
+// time
+let startTime;
+// obeject
+let objects = [];
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
 // Don't render the point cloud on mobile in order to maximize performance and
 // to avoid crowding limited screen space.
-const renderPointcloud = mobile === false;
 const stats = new Stats();
 const state = {
   backend: 'webgl',
   maxFaces: 1,
-  triangulateMesh: true,
-  predictIrises: true
+  detection: false
 };
 
 function setupDatGui() {
@@ -64,11 +68,10 @@ function setupDatGui() {
   gui.add(state, 'maxFaces', 1, 20, 1).onChange(async val => {
     model = await faceLandmarksDetection.load(
       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-      {maxFaces: val});
+      { maxFaces: val });
   });
 
-  gui.add(state, 'triangulateMesh');
-  gui.add(state, 'predictIrises');
+  gui.add(state, 'detection');
 
 }
 
@@ -97,28 +100,57 @@ async function setupCamera() {
 async function renderPrediction() {
   stats.begin();
 
-  const predictions = await model.estimateFaces({
-    input: video,
-    returnTensors: false,
-    flipHorizontal: false,
-    predictIrises: state.predictIrises
-  });
+  if (state.detection) {
 
-  if (predictions.length > 0) {
-    faceMesh.geometry.dispose();
-    const geometry = new THREE.BufferGeometry();
-    const points = new Float32Array(predictions[0].scaledMesh.flat());
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( points, 3 ) );
-    faceMesh.geometry = geometry;
+    const predictions = await model.estimateFaces({
+      input: video,
+      returnTensors: false,
+      flipHorizontal: false,
+      predictIrises: true
+    });
+
+    if (predictions.length > 0) {
+      faceMesh.geometry.dispose();
+      const geometry = new THREE.BufferGeometry();
+      const points = new Float32Array(predictions[0].scaledMesh.flat());
+      geometry.setAttribute( 'position', new THREE.BufferAttribute( points, 3 ) );
+      faceMesh.geometry = geometry;
+    }
+
   }
 
   stats.end();
+  return { mX: 0, mY: 0, mStatus: 0 };
 };
 
+function gameLogic(timeElasped, mouth) {
+  console.log('time gone: ', timeElasped);
+  // delete objs
+  for (let i = 0; i < objects.length; ++i) {
+    if (timeElasped - objects[i].birthtime > objects[i].lifetime) {
+      scene.remove(objects[i]);
+      objects.splice(i, 1);
+    }
+  }
+  // spawn objs
+  if (timeElasped > OBJSPAWNTIME[iTime]) {
+    let pos = OBJSPAWNPOS[iPos];
+    iTime++;
+    iPos++;
+    const obj = new GameObject("box", true, timeElasped);
+    obj.position.x = pos[0];
+    obj.position.y = pos[1];
+    obj.position.z = pos[2];
+    scene.add(obj);
+    objects.push(obj);
+  }
+}
+
 function animate() {
-  renderPrediction();
-	renderer.render( scene, camera );
-	rafID = requestAnimationFrame( animate );
+  let mouth = renderPrediction();
+  gameLogic(new Date().getTime() - startTime, mouth);
+  renderer.render(scene, camera);
+  rafID = requestAnimationFrame(animate);
 }
 
 async function main() {
@@ -135,18 +167,19 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
-  camera.position.z = 1000;
+  camera.position.z = 500;
 
   model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-    {maxFaces: state.maxFaces});
+    { maxFaces: state.maxFaces });
 
-  faceMesh = new THREE.Points( new THREE.BufferGeometry().setFromPoints([]), faceMaterial );
+  faceMesh = new THREE.Points(new THREE.BufferGeometry().setFromPoints([]), faceMaterial);
   faceMesh.rotateZ(3.1415926);
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 
+  startTime = new Date().getTime();
   animate();
 
 };
