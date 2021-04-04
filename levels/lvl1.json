@@ -1,0 +1,23 @@
+[
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 1000,
+        "spawnPos": [0, 0, 0],
+        "lifetime": 3000
+    },
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 1000,
+        "spawnPos": [100, 0, 0],
+        "lifetime": 3000
+    },
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 5000,
+        "spawnPos": [0, 100, 0],
+        "lifetime": 3000
+    }
+]

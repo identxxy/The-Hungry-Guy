@@ -1,34 +1,35 @@
-import { getColorMatrixTextureShapeWidthHeight } from '@tensorflow/tfjs-backend-webgl/dist/tex_util';
 import { GameObject } from './object';
+
+const LVLS = [];
+export async function loadGameLevels(lvl) {
+  LVLS.push( await import('./levels/lvl1.json') );
+  LVLS.push( await import('./levels/lvl2.json') );
+}
 
 const deadTime = 500;
 
-const OBJSPAWNTIME = [
-    1000, 1100, 1200,
-    1300, 1400, 1500
-];
-
-const OBJSPAWNPOS = [
-    [0, 0, 0],
-    [50, 0, 0],
-    [100, 0, 0],
-    [100, 100, 0],
-    [100, 50, 0],
-    [50, 50, 0],
-];
+let level;
+let iter;
 
 let objects;
-let iPos;
-let iTime;
 
 let startTime;
 let score;
 
-export function gameReset(scene){
-  if (objects) objects.forEach(obj => {scene.remove(obj)});
+export function gameChooseLevel(lvl) {
+  level = LVLS[lvl];
+  console.log('choose level: ', lvl);
+  // pause the game
+  startTime = null;
+}
+
+export function gameReset(scene) {
+  // default to be level 1
+  if (!level) level = LVLS[0];
+  // clean up remainning objs
+  if (objects) objects.forEach(obj => { scene.remove(obj) });
   objects = [];
-  iPos = 0;
-  iTime = 0;
+  iter = 0;
   score = 0;
   startTime = new Date().getTime();
 }
@@ -40,28 +41,25 @@ export function gameLogic(scene, mouth, state) {
   // for each obj
   for (let i = 0; i < objects.length; ++i) {
     const obj = objects[i];
-    if (obj.canBeEaten(mouth)){
-        obj.lifetime = timeElasped - obj.birthtime + deadTime;
-        score += obj.eaten();
-        console.log('score: ', score);
+    if (obj.canBeEaten(mouth)) {
+      obj.lifetime = timeElasped - obj.spawnTime + deadTime;
+      score += obj.eaten();
+      console.log('score: ', score);
     }
     // delte dead objects
-    if (timeElasped - obj.birthtime > obj.lifetime) {
+    if (timeElasped - obj.spawnTime > obj.lifetime) {
       scene.remove(obj);
       objects.splice(i, 1);
     }
   }
   // spawn objs
-  if (timeElasped > OBJSPAWNTIME[iTime]) {
-    let pos = OBJSPAWNPOS[iPos];
-    iTime++;
-    iPos++;
-    const obj = new GameObject("box", true, timeElasped);
-    obj.position.x = pos[0];
-    obj.position.y = pos[1];
-    obj.position.z = pos[2];
+  for (let levelObj = level[iter]; iter < level.length && timeElasped > levelObj.spawnTime; levelObj = level[++iter]) {
+    console.log('spawn ', timeElasped - levelObj.spawnTime);
+    console.log('iter ', iter);
+    const obj = new GameObject(levelObj);
     scene.add(obj);
     objects.push(obj);
   }
+  // move objs
   return score;
 }

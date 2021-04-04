@@ -25,7 +25,7 @@ import { TRIANGULATION } from './triangulation';
 
 import * as THREE from 'three';
 
-import { gameLogic, gameReset } from './logic';
+import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -53,6 +53,7 @@ const state = {
   backend: 'webgl',
   maxFaces: 1,
   debug: false,
+  gameLevel: 1
 };
 
 function setupDatGui() {
@@ -62,7 +63,9 @@ function setupDatGui() {
       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
       { maxFaces: val });
   });
-
+  gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
+    gameChooseLevel(val);
+  });
   gui.add(state, 'debug');
   const obj = { Start: function () { console.log("game start!"); gameReset(scene); } };
   gui.add(obj, 'Start');
@@ -153,6 +156,7 @@ async function main() {
   video.width = videoWidth;
   video.height = videoHeight;
 
+  await loadGameLevels();
   camera.position.z = 500;
 
   model = await faceLandmarksDetection.load(

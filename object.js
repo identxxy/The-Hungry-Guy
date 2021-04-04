@@ -15,15 +15,19 @@ const score_dict = {
 }
 
 export class GameObject extends THREE.Mesh{
-    constructor(name, isFood, time, lifetime = 3000){
+    constructor(levelObj){
+        const name = levelObj.name;
         super(geo_dict[name][0], mtr_dict[name][0]);
         if (Object.keys(geo_dict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
-        this.name = name;
-        this.isFood = isFood;
-        this.lifetime = lifetime;
-        this.birthtime = time;
+        this.name = levelObj.name;
+        this.isFood = levelObj.isFood;
+        this.lifetime = levelObj.lifetime;
+        this.spawnTime = levelObj.spawnTime;
+        this.position.x = levelObj.spawnPos[0];
+        this.position.y = levelObj.spawnPos[1];
+        this.position.z = levelObj.spawnPos[2];
         this.score = score_dict[name];
         this.eatenGeometry = geo_dict[name][1];
         this.eatenMaterial = mtr_dict[name][1];
