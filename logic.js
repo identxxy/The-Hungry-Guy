@@ -17,7 +17,7 @@ let startTime;
 let score;
 
 export function gameChooseLevel(lvl) {
-  level = LVLS[lvl];
+  level = LVLS[lvl-1];
   console.log('choose level: ', lvl);
   // pause the game
   startTime = null;
@@ -41,6 +41,11 @@ export function gameLogic(scene, mouth, state) {
   // for each obj
   for (let i = 0; i < objects.length; ++i) {
     const obj = objects[i];
+    // move objs
+    obj.position.x += obj.velocity[0] * (timeElasped - obj.spawnTime)/ 1000;
+    obj.position.y += obj.velocity[1] * (timeElasped - obj.spawnTime)/ 1000;
+    obj.position.z += obj.velocity[2] * (timeElasped - obj.spawnTime)/ 1000;
+    // judge eaten
     if (obj.canBeEaten(mouth)) {
       obj.lifetime = timeElasped - obj.spawnTime + deadTime;
       score += obj.eaten();
@@ -60,6 +65,5 @@ export function gameLogic(scene, mouth, state) {
     scene.add(obj);
     objects.push(obj);
   }
-  // move objs
   return score;
 }

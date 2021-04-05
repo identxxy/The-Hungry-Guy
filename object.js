@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+const mouthOpenThreshold = 5;
+
 const geo_dict = {
     'box': [new THREE.BoxGeometry(10, 10, 10),
             new THREE.SphereGeometry(5)]
@@ -28,6 +30,7 @@ export class GameObject extends THREE.Mesh{
         this.position.x = levelObj.spawnPos[0];
         this.position.y = levelObj.spawnPos[1];
         this.position.z = levelObj.spawnPos[2];
+        this.velocity = levelObj.velocity;
         this.score = score_dict[name];
         this.eatenGeometry = geo_dict[name][1];
         this.eatenMaterial = mtr_dict[name][1];
@@ -41,7 +44,8 @@ export class GameObject extends THREE.Mesh{
         const ymin = mouth.low[1];
         const xmax = mouth.right[0];
         const xmin = mouth.left[0];
-        if (ymax > this.position.y && ymin < this.position.y &&
+        if (ymax - ymin > mouthOpenThreshold &&
+            ymax > this.position.y && ymin < this.position.y &&
             xmax > this.position.x && xmin < this.position.x ){
             return true;
         }
@@ -52,6 +56,7 @@ export class GameObject extends THREE.Mesh{
         this.geometry = this.eatenGeometry;
         this.material = this.eatenMaterial;
         this.isEaten = true;
+        this.velocity = [0,0,0];
         return this.score;
     }
 }
