@@ -1,0 +1,26 @@
+[
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 1000,
+        "spawnPos": [0, 0, 0],
+        "velocity": [2, 0, 0],
+        "lifetime": 3000
+    },
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 3000,
+        "spawnPos": [100, 0, 0],
+        "velocity": [0, 5, 0],
+        "lifetime": 3000
+    },
+    {
+        "name": "box",
+        "isFood": true,
+        "spawnTime": 5000,
+        "spawnPos": [0, 100, 0],
+        "velocity": [-10, -10, 0],
+        "lifetime": 3000
+    }
+]
