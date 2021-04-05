@@ -29,6 +29,7 @@ import { gameLogic, gameReset } from './logic';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
+const PI = 3.1415926;
 
 function isMobile() {
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -40,9 +41,11 @@ let model, videoWidth, videoHeight, video, rafID, faceMesh;
 // three.js settings
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas });
+const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
+renderer.setClearColor(new THREE.Color(0xffffff));
+renderer.setClearAlpha(0.7);
 renderer.setSize(window.innerWidth, window.innerHeight);
-const faceMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 5 });
+const faceMaterial = new THREE.MeshLambertMaterial({ color: 0x000000, wireframe: true});
 
 const VIDEO_SIZE = 500;
 const mobile = isMobile();
@@ -101,8 +104,15 @@ async function renderPrediction() {
 
   if (predictions.length > 0) {
     faceMesh.geometry.dispose();
-    const geometry = new THREE.BufferGeometry();
-    const points = new Float32Array(predictions[0].scaledMesh.flat());
+      const geometry = new THREE.BufferGeometry();
+      var points = new Float32Array(TRIANGULATION.length*3);
+      for (var i = 0; i < TRIANGULATION.length; i++) {
+          const index = TRIANGULATION[i];
+          points[i * 3] = (predictions[0].scaledMesh[index].flat())[0];
+          points[i * 3 + 1] = (predictions[0].scaledMesh[index].flat())[1];
+          points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
+      }
+      //const points = new Float32Array(predictions[0].scaledMesh.flat());
     geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
     faceMesh.geometry = geometry;
     const annotation = predictions[0].annotations;
@@ -159,8 +169,8 @@ async function main() {
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
     { maxFaces: state.maxFaces });
 
-  faceMesh = new THREE.Points(new THREE.BufferGeometry().setFromPoints([]), faceMaterial);
-  faceMesh.rotateZ(3.1415926);
+  faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), faceMaterial);
+  faceMesh.rotateZ(PI);
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
