@@ -25,7 +25,7 @@ import { TRIANGULATION } from './triangulation';
 
 import * as THREE from 'three';
 
-import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
+import { loadGameLevels, gameLogic, gameReset, gameChooseLevel, updatescore } from './logic';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -145,7 +145,8 @@ async function renderPrediction() {
 
 async function animate() {
   stats.begin();
-  const mouth = await renderPrediction();
+    const mouth = await renderPrediction();
+    updatescore();
   gameLogic(scene, mouth, state);
   renderer.render(scene, camera);
   stats.end();

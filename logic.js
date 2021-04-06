@@ -1,5 +1,7 @@
 import { GameObject } from './object';
 
+import * as THREE from 'three';
+
 const LVLS = [];
 export async function loadGameLevels(lvl) {
   LVLS.push( await import('./levels/lvl1.json') );
@@ -48,7 +50,7 @@ export function gameLogic(scene, mouth, state) {
     // judge eaten
     if (obj.canBeEaten(mouth)) {
       obj.lifetime = timeElasped - obj.spawnTime + deadTime;
-      score += obj.eaten();
+        score += obj.eaten();
       console.log('score: ', score);
     }
     // delte dead objects
@@ -66,4 +68,18 @@ export function gameLogic(scene, mouth, state) {
     objects.push(obj);
   }
   return score;
+}
+
+export function updatescore() {
+    if (!startTime) return;
+    var text = document.createElement('div');
+    text.style.position = 'absolute';
+    text.style.width = 220;
+    text.style.height = 70;
+    text.style.backgroundColor = "lightblue";
+    text.innerHTML = "<font color=white size=50px>Score: " + score + "</font>";
+    text.color = "white";
+    text.style.top = 0 + 'px';
+    text.style.left = 800 + 'px';
+    document.getElementById('main').appendChild(text);
 }
