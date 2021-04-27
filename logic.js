@@ -16,14 +16,7 @@ let iter;
 let objects;
 
 let startTime;
-const scoreElement = document.getElementById('score');    var text = document.createElement('div');
-    scoreElement.style.position = 'absolute';
-    scoreElement.style.width = 320;
-    scoreElement.style.height = 70;
-    scoreElement.style.backgroundColor = "lightblue";
-    scoreElement.color = "white";
-    scoreElement.style.top = 0 + 'px';
-    scoreElement.style.left = 600 + 'px'
+const scoreElement = document.getElementById('score'); 
 let score;
 
 export function gameChooseLevel(lvl) {
@@ -75,6 +68,6 @@ export function gameLogic(scene, mouth, state) {
     scene.add(obj);
     objects.push(obj);
   }
-  scoreElement.innerHTML = "<font color=white size=30>Score: " + score + "</font>";
+  scoreElement.innerHTML = 'Score: ' + score;
   return score;
 }

@@ -1,0 +1,47 @@
+﻿:root {
+    --video-width: 480px;
+    --video-height: 480px;
+    --canvas-width: 1280px;
+    --canvas-height: 720px;
+}
+
+#canvas-container {
+    width: 100%;
+    text-align: center;
+}
+
+#mainCanvas {
+    display: inline;
+    overflow: hidden;
+    background: url("image.jpg") center no-repeat;
+    background-size: cover;
+    width: var(--canvas-width);
+    height: var(--canvas-height);
+}
+
+#video-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+}
+
+#video {
+    margin: auto;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    display: inline;
+    width: var(--video-width);
+    height: var(--canvas-height);
+}
+
+#score {
+    text-align: center;
+    width: 320px;
+    height: 40px;
+    background-color: lightblue;
+    font-size: 30;
+    color: white;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}

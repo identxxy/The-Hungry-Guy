@@ -14,25 +14,22 @@ limitations under the License.
 ==============================================================================-->
 
 <head>
-    <!-- Load three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="MyStyle.css">
-    <style>
-    </style>
+  <!-- Load three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+  </style>
 </head>
 
 <body>
   <div id="main">
-    <canvas id="mainCanvas"></canvas>
-    <div id="score"></div>
-    <video id="video" playsinline style="
-          -webkit-transform: scaleX(-1);
-          transform: scaleX(-1);
-          visibility: hidden;
-          width: auto;
-          height: auto;
-          ">
-    </video>
+    <div id="canvas-container">
+      <div id="score">Loading...</div>
+      <canvas id="mainCanvas"></canvas>
+    </div>
+    <div id="video-container">
+      <video id="video"></video>
+    </div>
     <script src="index.js"></script>
   </div>
 </body>

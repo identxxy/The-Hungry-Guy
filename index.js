@@ -32,29 +32,36 @@ const NUM_IRIS_KEYPOINTS = 5;
 const PI = 3.1415926;
 
 function isMobile() {
-  const isAndroid = /Android/i.test(navigator.userAgent);
+  return false;
+  /*const isAndroid = /Android/i.test(navigator.userAgent);
   const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  return isAndroid || isiOS;
+  return isAndroid || isiOS;*/
 }
 
-let model, videoWidth, videoHeight, video, rafID, faceMesh;
+let model, video, score, canvas, rafID, faceMesh;
+video = document.getElementById('video');
+score = document.getElementById('score');
+const docStyle = getComputedStyle(document.documentElement);
+const videoWidth = parseInt(docStyle.getPropertyValue('--video-width'), 10);
+const videoHeight = parseInt(docStyle.getPropertyValue('--video-height'), 10);
+const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
+const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
 // three.js settings
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(canvasWidth, canvasHeight);
 const faceMaterial = new THREE.MeshLambertMaterial({ color: 0x000000, wireframe: true});
 
-const VIDEO_SIZE = 500;
 const mobile = isMobile();
 // Don't render the point cloud on mobile in order to maximize performance and
 // to avoid crowding limited screen space.
 const stats = new Stats();
 const state = {
-  backend: 'webgl',
   maxFaces: 1,
+  showVideo: false,
   debug: false,
   gameLevel: 1
 };
@@ -69,13 +76,16 @@ function setupDatGui() {
   gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
     gameChooseLevel(val);
   });
+  gui.add(state, 'showVideo').onChange(async val => {
+    video.style.display = state.showVideo? 'inline': 'none';
+  });
   gui.add(state, 'debug');
   const obj = { Start: function () { console.log("game start!"); gameReset(scene); } };
   gui.add(obj, 'Start');
 }
 
 async function setupCamera() {
-  video = document.getElementById('video');
+  video.style.display = 'none';
 
   const stream = await navigator.mediaDevices.getUserMedia({
     'audio': false,
@@ -83,11 +93,12 @@ async function setupCamera() {
       facingMode: 'user',
       // Only setting the video to a specified size in order to accommodate a
       // point cloud, so on mobile devices accept the default size.
-      width: mobile ? undefined : VIDEO_SIZE,
-      height: mobile ? undefined : VIDEO_SIZE
+      width: mobile ? undefined : videoWidth,
+      height: mobile ? undefined : videoHeight
     },
   });
   video.srcObject = stream;
+  video.play();
 
   return new Promise((resolve) => {
     video.onloadedmetadata = () => {
@@ -153,32 +164,31 @@ async function animate() {
 }
 
 async function main() {
-  await tf.setBackend(state.backend);
+  // gui
   setupDatGui();
-
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
   document.getElementById('main').appendChild(stats.dom);
-
+  // real camera
   await setupCamera();
-  video.play();
-  videoWidth = video.videoWidth;
-  videoHeight = video.videoHeight;
-  video.width = videoWidth;
-  video.height = videoHeight;
-
+  // game levels
   await loadGameLevels();
-  camera.position.z = 500;
 
+  // tfjs 
+  await tf.setBackend('webgl');
   model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
     { maxFaces: state.maxFaces });
 
+  // three.js camera
+  camera.position.z = 500;
   faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), faceMaterial);
   faceMesh.rotateZ(PI);
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 
+  score = document.getElementById("score");
+  score.innerHTML = "Game Loaded";
   animate();
 
 };
