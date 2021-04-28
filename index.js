@@ -188,7 +188,12 @@ async function main() {
   scene.add(faceMesh);
 
   score = document.getElementById("score");
-  score.innerHTML = "Game Loaded";
+  score.innerHTML = "Detecting face...";
+  while (true){
+    let mouth = await renderPrediction();
+    if (mouth != null) break; 
+  }
+  score.innerHTML = "Are YOU Ready?";
   animate();
 
 };
