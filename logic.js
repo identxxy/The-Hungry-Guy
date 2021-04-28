@@ -8,8 +8,6 @@ export async function loadGameLevels(lvl) {
   LVLS.push( await import('./levels/lvl2.json') );
 }
 
-const deadTime = 500;
-
 let level;
 let iter;
 
@@ -50,7 +48,7 @@ export function gameLogic(scene, mouth, state) {
     obj.position.z += obj.velocity[2] * (timeElasped - obj.spawnTime)/ 1000;
     // judge eaten
     if (obj.canBeEaten(mouth)) {
-      obj.lifetime = timeElasped - obj.spawnTime + deadTime;
+      obj.lifetime = timeElasped - obj.spawnTime + obj.deadTime;
         score += obj.eaten();
       console.log('score: ', score);
     }

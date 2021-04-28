@@ -30,11 +30,14 @@ export class GameObject extends THREE.Mesh{
         this.position.x = levelObj.spawnPos[0];
         this.position.y = levelObj.spawnPos[1];
         this.position.z = levelObj.spawnPos[2];
-        this.velocity = levelObj.velocity;
         this.score = score_dict[name];
         this.eatenGeometry = geo_dict[name][1];
         this.eatenMaterial = mtr_dict[name][1];
+        // fixed
         this.isEaten = false;
+        // optional
+        this.velocity = levelObj.velocity? levelObj.velocity : [0,0,0];
+        this.deadTime = levelObj.deadTime? levelObj.deadTime : 500;
     }
 
     canBeEaten(mouth){
