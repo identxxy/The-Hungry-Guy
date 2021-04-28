@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 const mouthOpenThreshold = 5;
+const objDefaultDeadTime = 500;
 
 const geo_dict = {
     'box': [new THREE.BoxGeometry(10, 10, 10),
@@ -37,7 +38,7 @@ export class GameObject extends THREE.Mesh{
         this.isEaten = false;
         // optional
         this.velocity = levelObj.velocity? levelObj.velocity : [0,0,0];
-        this.deadTime = levelObj.deadTime? levelObj.deadTime : 500;
+        this.deadTime = levelObj.deadTime? levelObj.deadTime : objDefaultDeadTime;
     }
 
     canBeEaten(mouth){
