@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 const mouthOpenThreshold = 5;
 const objDefaultDeadTime = 500;
 
@@ -17,7 +15,7 @@ const score_dict = {
     'box': 10
 }
 
-export class GameObject extends THREE.Mesh{
+export class GameObject extends Physijs.BoxMesh{
     constructor(levelObj){
         const name = levelObj.name;
         super(geo_dict[name][0], mtr_dict[name][0]);
@@ -37,8 +35,8 @@ export class GameObject extends THREE.Mesh{
         // fixed
         this.isEaten = false;
         // optional
-        this.velocity = levelObj.velocity? levelObj.velocity : [0,0,0];
-        this.deadTime = levelObj.deadTime? levelObj.deadTime : objDefaultDeadTime;
+        this.velocity = levelObj.velocity || [0,0,0];
+        this.deadTime = levelObj.deadTime || objDefaultDeadTime;
     }
 
     canBeEaten(mouth){

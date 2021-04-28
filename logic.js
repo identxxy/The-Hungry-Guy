@@ -1,8 +1,6 @@
 import { GameObject } from './object';
 import { loadLevelAudios, playLevelMusic } from './audio'
 
-import * as THREE from 'three';
-
 const LVLS = [];
 export async function loadGameLevels(lvl) {
   loadLevelAudios();

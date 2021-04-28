@@ -23,8 +23,6 @@ import '@tensorflow/tfjs-backend-cpu';
 
 import { TRIANGULATION } from './triangulation';
 
-import * as THREE from 'three';
-
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
 
@@ -49,7 +47,7 @@ const videoHeight = parseInt(docStyle.getPropertyValue('--video-height'), 10);
 const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
 const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
 // three.js settings
-const scene = new THREE.Scene();
+const scene = new Physijs.Scene();
 const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
@@ -170,6 +168,7 @@ async function animate() {
   stats.begin();
   const mouth = await renderPrediction();
   gameLogic(scene, mouth, state);
+  scene.simulate();
   renderer.render(scene, camera);
   stats.end();
   rafID = requestAnimationFrame(animate);

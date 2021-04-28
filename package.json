@@ -15,8 +15,7 @@
     "@tensorflow/tfjs-backend-webgl": "^3.1.0",
     "@tensorflow/tfjs-converter": "^3.1.0",
     "@tensorflow/tfjs-core": "^3.1.0",
-    "stats.js": "^0.17.0",
-    "three": "^0.127.0"
+    "stats.js": "^0.17.0"
   },
   "scripts": {
     "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --target browser --open",
@@ -39,6 +38,7 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.6.0",
     "yalc": "~1.0.0-pre.27"
   },
   "eslintConfig": {
@@ -57,5 +57,8 @@
   },
   "eslintIgnore": [
     "dist/"
-  ]
+  ],
+  "staticFiles": {
+    "staticPath": "physijs/static"
+  }
 }
