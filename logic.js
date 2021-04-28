@@ -1,14 +1,16 @@
 import { GameObject } from './object';
+import { loadLevelAudios, playLevelMusic } from './audio'
 
 import * as THREE from 'three';
 
 const LVLS = [];
 export async function loadGameLevels(lvl) {
+  loadLevelAudios();
   LVLS.push( await import('./levels/lvl1.json') );
   LVLS.push( await import('./levels/lvl2.json') );
 }
 
-let level;
+let level, iLevel;
 let iter;
 
 let objects;
@@ -18,15 +20,15 @@ const scoreElement = document.getElementById('score');
 let score;
 
 export function gameChooseLevel(lvl) {
-  level = LVLS[lvl-1];
+  iLevel = lvl;
   console.log('choose level: ', lvl);
   // pause the game
   startTime = null;
 }
 
 export function gameReset(scene) {
-  // default to be level 1
-  if (!level) level = LVLS[0];
+  level = LVLS[iLevel - 1];
+  playLevelMusic(iLevel - 1);
   // clean up remainning objs
   if (objects) objects.forEach(obj => { scene.remove(obj) });
   objects = [];

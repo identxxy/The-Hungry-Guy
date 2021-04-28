@@ -5,7 +5,7 @@
     --canvas-height: 720px;
 }
 
-#canvas-container {
+#container {
     width: 100%;
     text-align: center;
 }
@@ -19,16 +19,12 @@
     height: var(--canvas-height);
 }
 
-#video-container {
-    width: 100%;
-    text-align: center;
-    margin-top: 0px;
-}
-
 #video {
-    margin: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
     -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
+    transform: scaleX(-1) translate(50%, -50%);
     display: inline;
     width: var(--video-width);
     height: var(--canvas-height);
@@ -44,4 +40,8 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+}
+
+#audio {
+    display: none;
 }

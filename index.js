@@ -25,7 +25,8 @@ import { TRIANGULATION } from './triangulation';
 
 import * as THREE from 'three';
 
-import { loadGameLevels, gameLogic, gameReset, gameChooseLevel} from './logic';
+import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
+import { playLoadingMusic, muteMusic } from './audio';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -38,7 +39,8 @@ function isMobile() {
   return isAndroid || isiOS;*/
 }
 
-let model, video, score, canvas, rafID, faceMesh;
+// elements settings
+let video, score, rafID;
 video = document.getElementById('video');
 score = document.getElementById('score');
 const docStyle = getComputedStyle(document.documentElement);
@@ -54,13 +56,17 @@ renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
 renderer.setSize(canvasWidth, canvasHeight);
 const faceMaterial = new THREE.MeshLambertMaterial({ color: 0x000000, wireframe: true});
+// faceMesh setting
+let model, faceMesh;
 
-const mobile = isMobile();
 // Don't render the point cloud on mobile in order to maximize performance and
 // to avoid crowding limited screen space.
+const mobile = isMobile();
+// stats
 const stats = new Stats();
 const state = {
   maxFaces: 1,
+  mute: false,
   showVideo: false,
   debug: false,
   gameLevel: 1
@@ -76,6 +82,12 @@ function setupDatGui() {
   gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
     gameChooseLevel(val);
   });
+  // initial choice
+  gameChooseLevel(1);
+
+  gui.add(state, 'mute').onChange(async val => {
+    muteMusic(val);
+  })
   gui.add(state, 'showVideo').onChange(async val => {
     video.style.display = state.showVideo? 'inline': 'none';
   });
@@ -164,6 +176,8 @@ async function animate() {
 }
 
 async function main() {
+  // bgm
+  playLoadingMusic();
   // gui
   setupDatGui();
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
