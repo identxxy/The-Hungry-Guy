@@ -1,9 +1,9 @@
 const audio = document.getElementById('audio');
 const loadingMusic = require('./bgm/Loading.m4a');
-const lvlMusics = [];
-let mute = false;
+let lvlMusics;
 
 export function loadLevelAudios() {
+    lvlMusics = [];
     lvlMusics.push(require('./bgm/lvl1.m4a'));
     lvlMusics.push(require('./bgm/lvl2.m4a'));
 }
