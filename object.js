@@ -35,7 +35,9 @@ export class GameObject extends Physijs.BoxMesh{
         // fixed
         this.isEaten = false;
         // optional
-        this.velocity = levelObj.velocity || [0,0,0];
+        this.initVel = levelObj.initVel || [0,0,0];
+        this.setLinearVelocity( new THREE.Vector3(this.initVel[0], this.initVel[1], this.initVel[2]));
+        this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
         this.deadTime = levelObj.deadTime || objDefaultDeadTime;
     }
 
@@ -58,7 +60,11 @@ export class GameObject extends Physijs.BoxMesh{
         this.geometry = this.eatenGeometry;
         this.material = this.eatenMaterial;
         this.isEaten = true;
-        this.velocity = [0,0,0];
+        let zero = new THREE.Vector3(0, 0, 0);
+        this.setAngularFactor(zero);
+        this.setAngularVelocity(zero);
+        this.setLinearFactor(zero);
+        this.setLinearVelocity(zero);
         return this.score;
     }
 }

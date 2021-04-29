@@ -46,8 +46,10 @@ const videoWidth = parseInt(docStyle.getPropertyValue('--video-width'), 10);
 const videoHeight = parseInt(docStyle.getPropertyValue('--video-height'), 10);
 const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
 const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
-// three.js settings
+// Physi.js settings
 const scene = new Physijs.Scene();
+scene.setGravity(new THREE.Vector3(0, -10 * myMeter, 0 ));
+// three.js settings
 const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
@@ -90,8 +92,10 @@ function setupDatGui() {
     video.style.display = state.showVideo? 'inline': 'none';
   });
   gui.add(state, 'debug');
-  const obj = { Start: function () { console.log("game start!"); gameReset(scene); } };
-  gui.add(obj, 'Start');
+  const loadButton = { Reload: function () { console.log("reload levels"); loadGameLevels(); } };
+  gui.add(loadButton, 'Reload');
+  const startButton = { Start: function () { console.log("game start!"); gameReset(scene); } };
+  gui.add(startButton, 'Start');
 }
 
 async function setupCamera() {

@@ -1,21 +1,20 @@
 import { GameObject } from './object';
-import { loadLevelAudios, playLevelMusic } from './audio'
+import { loadLevelAudios, playLevelMusic } from './audio';
 
-const LVLS = [];
-export async function loadGameLevels(lvl) {
-  loadLevelAudios();
-  LVLS.push( await import('./levels/lvl1.json') );
-  LVLS.push( await import('./levels/lvl2.json') );
-}
-
-let level, iLevel;
+let levels, level, iLevel;
 let iter;
-
 let objects;
-
 let startTime;
+
 const scoreElement = document.getElementById('score'); 
 let score;
+
+export function loadGameLevels() {
+  loadLevelAudios();
+  levels = [];
+  levels.push( require('./levels/lvl1.json') );
+  levels.push( require('./levels/lvl2.json') );
+}
 
 export function gameChooseLevel(lvl) {
   iLevel = lvl;
@@ -25,7 +24,7 @@ export function gameChooseLevel(lvl) {
 }
 
 export function gameReset(scene) {
-  level = LVLS[iLevel - 1];
+  level = levels[iLevel - 1];
   playLevelMusic(iLevel - 1);
   // clean up remainning objs
   if (objects) objects.forEach(obj => { scene.remove(obj) });
@@ -42,10 +41,6 @@ export function gameLogic(scene, mouth, state) {
   // for each obj
   for (let i = 0; i < objects.length; ++i) {
     const obj = objects[i];
-    // move objs
-    obj.position.x += obj.velocity[0] * (timeElasped - obj.spawnTime)/ 1000;
-    obj.position.y += obj.velocity[1] * (timeElasped - obj.spawnTime)/ 1000;
-    obj.position.z += obj.velocity[2] * (timeElasped - obj.spawnTime)/ 1000;
     // judge eaten
     if (obj.canBeEaten(mouth)) {
       obj.lifetime = timeElasped - obj.spawnTime + obj.deadTime;
