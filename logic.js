@@ -59,6 +59,7 @@ export function gameLogic(scene, mouth, state) {
     console.log('iter ', iter);
     const obj = new GameObject(levelObj);
     scene.add(obj);
+    obj.setInitVel();
     objects.push(obj);
   }
   scoreElement.innerHTML = 'Score: ' + score;

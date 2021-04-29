@@ -36,9 +36,16 @@ export class GameObject extends Physijs.BoxMesh{
         this.isEaten = false;
         // optional
         this.initVel = levelObj.initVel || [0,0,0];
-        this.setLinearVelocity( new THREE.Vector3(this.initVel[0], this.initVel[1], this.initVel[2]));
-        this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
         this.deadTime = levelObj.deadTime || objDefaultDeadTime;
+    }
+
+    setInitVel(){
+        this.setLinearVelocity( new THREE.Vector3(
+            this.initVel[0] * myMeter,
+            this.initVel[1] * myMeter,
+            this.initVel[2] * myMeter
+        ));
+        this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
     }
 
     canBeEaten(mouth){
