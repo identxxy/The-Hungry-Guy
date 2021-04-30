@@ -1,5 +1,5 @@
 import { GameObject } from './object';
-import { loadLevelAudios, playLevelMusic } from './audio';
+import { loadLevelAudios, playLevelMusic, playSoundEffect } from './audio';
 
 let levels, level, iLevel;
 let iter;
@@ -43,6 +43,7 @@ export function gameLogic(scene, mouth, state) {
     const obj = objects[i];
     // judge eaten
     if (obj.canBeEaten(mouth)) {
+      playSoundEffect(0);
       score += obj.score;
       scene.remove(obj);
       objects.splice(i, 1);
