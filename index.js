@@ -25,6 +25,7 @@ import { TRIANGULATION } from './triangulation';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
+import { loadAllTextures, facetexture } from './texture';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -55,7 +56,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
 renderer.setSize(canvasWidth, canvasHeight);
-const faceMaterial = new THREE.MeshLambertMaterial({ color: 0x000000, wireframe: true});
+const faceMaterial = new THREE.MeshPhongMaterial({ map: new THREE.TextureLoader().load(facetexture),side:THREE.DoubleSide});
 // faceMesh setting
 let model, faceMesh;
 
@@ -189,7 +190,8 @@ async function main() {
   await setupCamera();
   // game levels
   await loadGameLevels();
-
+  // load texture picture
+  await loadAllTextures();
   // tfjs 
   await tf.setBackend('webgl');
   model = await faceLandmarksDetection.load(

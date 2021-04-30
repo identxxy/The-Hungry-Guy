@@ -1,3 +1,5 @@
+import { boxtexture } from './texture';
+
 const mouthOpenThreshold = 5;
 const objDefaultDeadTime = 500;
 
@@ -7,8 +9,8 @@ const geo_dict = {
 }
 
 const mtr_dict = {
-    'box': [new THREE.MeshBasicMaterial( {color: 0x00ff00} ),
-            new THREE.MeshBasicMaterial( {color: 0xff0000} )]
+    'box': [new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(boxtexture), side: THREE.DoubleSide}),
+        new THREE.MeshBasicMaterial({ color: 0xff0000 })]//{color: 0x00ff00}
 }
 
 const score_dict = {
