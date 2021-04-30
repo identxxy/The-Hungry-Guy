@@ -1,23 +1,22 @@
 [
     {
         "name": "box",
-        "isFood": true,
         "spawnTime": 1000,
-        "spawnPos": [0, 0, 0],
-        "lifetime": 10000
+        "type": "left"
     },
     {
         "name": "box",
-        "isFood": true,
         "spawnTime": 3000,
-        "spawnPos": [100, 0, 0],
-        "lifetime": 10000
+        "type": "right"
     },
     {
         "name": "box",
-        "isFood": true,
         "spawnTime": 5000,
-        "spawnPos": [0, 100, 0],
-        "lifetime": 10000
+        "type": "down"
+    },
+    {
+        "name": "box",
+        "spawnTime": 7000,
+        "type": "up"
     }
 ]

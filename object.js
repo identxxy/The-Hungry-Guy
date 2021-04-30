@@ -1,14 +1,13 @@
 const mouthOpenThreshold = 5;
-const objDefaultDeadTime = 500;
+const objDefaultLifeTimeMs = 10000;
+const objDefaultTakenTimeMs = 5000;
 
 const geo_dict = {
-    'box': [new THREE.BoxGeometry(10, 10, 10),
-            new THREE.SphereGeometry(5)]
+    'box': new THREE.BoxGeometry(10, 10, 10)
 }
 
 const mtr_dict = {
-    'box': [new THREE.MeshBasicMaterial( {color: 0x00ff00} ),
-            new THREE.MeshBasicMaterial( {color: 0xff0000} )]
+    'box': new THREE.MeshBasicMaterial( {color: 0x00ff00} )
 }
 
 const score_dict = {
@@ -18,34 +17,91 @@ const score_dict = {
 export class GameObject extends Physijs.BoxMesh{
     constructor(levelObj){
         const name = levelObj.name;
-        super(geo_dict[name][0], mtr_dict[name][0]);
+        super(geo_dict[name], mtr_dict[name]);
         if (Object.keys(geo_dict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
+        // read from file
         this.name = levelObj.name;
-        this.isFood = levelObj.isFood;
-        this.lifetime = levelObj.lifetime;
         this.spawnTime = levelObj.spawnTime;
-        this.position.x = levelObj.spawnPos[0];
-        this.position.y = levelObj.spawnPos[1];
-        this.position.z = levelObj.spawnPos[2];
+        this.type = levelObj.type;
+
+        // implied
         this.score = score_dict[name];
-        this.eatenGeometry = geo_dict[name][1];
-        this.eatenMaterial = mtr_dict[name][1];
+        switch (this.type)
+        {
+            case 'left':
+                this.position.x = -300;
+                this.position.y = 100;
+                this.position.z = 100;
+                break;
+            case 'right':
+                this.position.x = 300;
+                this.position.y = 100;
+                this.position.z = 100;
+                break;
+            case 'up':
+                this.position.x = 0;
+                this.position.y = 300;
+                this.position.z = 100;
+                break;
+            case 'down':
+                this.position.x = 0;
+                this.position.y = -100;
+                this.position.z = 300;
+                break;
+            default:
+                console.error("wrong obj type!!");
+        }
+
         // fixed
         this.isEaten = false;
+
         // optional
-        this.initVel = levelObj.initVel || [0,0,0];
-        this.deadTime = levelObj.deadTime || objDefaultDeadTime;
+        this.lifeTime = levelObj.lifeTime || objDefaultLifeTimeMs;
+        // only for up and down obj
+        this.takenTime = levelObj.takenTime || objDefaultTakenTimeMs;
     }
 
-    setInitVel(){
-        this.setLinearVelocity( new THREE.Vector3(
-            this.initVel[0] * myMeter,
-            this.initVel[1] * myMeter,
-            this.initVel[2] * myMeter
-        ));
+    give(){
+        let giveVel = new THREE.Vector3();
+        switch (this.type)
+        {
+            case 'left':
+                giveVel.x = 10;
+                giveVel.y = 5;
+                giveVel.z = -5;
+                break;
+            case 'right':
+                giveVel.x = -10;
+                giveVel.y = 5;
+                giveVel.z = -5;
+                break;
+            case 'up':
+                giveVel.x = 0;
+                giveVel.y = -5;
+                giveVel.z = 0;
+                break;
+            case 'down':
+                giveVel.x = 0;
+                giveVel.y = 0;
+                giveVel.z = -5;
+                break;
+        }
+        this.setLinearVelocity( giveVel.multiplyScalar(myMeter) );
         this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
+    }
+
+    take(){
+        this.takenAway = true;
+        let takeVel = new THREE.Vector3();
+        if (this.type == "up"){
+            console.log("take away up obj");
+        }
+        else if (this.type == "down"){
+            console.log("take away down obj");
+        }
+        this.setLinearVelocity( takeVel.multiplyScalar(myMeter) );
     }
 
     canBeEaten(mouth){
@@ -63,16 +119,21 @@ export class GameObject extends Physijs.BoxMesh{
         return false;
     }
     
-    eaten(){
-        this.geometry = this.eatenGeometry;
-        this.material = this.eatenMaterial;
-        this.isEaten = true;
-        let zero = new THREE.Vector3(0, 0, 0);
-        this.setAngularFactor(zero);
-        this.setAngularVelocity(zero);
-        this.setLinearFactor(zero);
-        this.setLinearVelocity(zero);
-        return this.score;
+    canBeTaken(timeElasped){
+        if ( !this.takenAway || this.type == "left " || this.type == "right" )
+            return false;
+        return (timeElasped - this.spawnTime > this.takenTime);
+    }
+
+    canBeRemoved(timeElasped){
+        if (this.position.x < -400 ||
+            this.position.x > 400  ||
+            this.position.y < -400 ||
+            this.position.y > 400  ||
+            timeElasped - this.spawnTime > this.lifeTime
+            )
+            return true;
+        return false;
     }
 }
 

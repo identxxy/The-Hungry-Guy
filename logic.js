@@ -43,12 +43,16 @@ export function gameLogic(scene, mouth, state) {
     const obj = objects[i];
     // judge eaten
     if (obj.canBeEaten(mouth)) {
-      obj.lifetime = timeElasped - obj.spawnTime + obj.deadTime;
-        score += obj.eaten();
-      console.log('score: ', score);
+      score += obj.score;
+      scene.remove(obj);
+      objects.splice(i, 1);
     }
-    // delte dead objects
-    if (timeElasped - obj.spawnTime > obj.lifetime) {
+    // judge taken
+    if (obj.canBeTaken(timeElasped)) {
+      obj.take();
+    }
+    // judge removed
+    if (obj.canBeRemoved(timeElasped)) {
       scene.remove(obj);
       objects.splice(i, 1);
     }
@@ -59,7 +63,7 @@ export function gameLogic(scene, mouth, state) {
     console.log('iter ', iter);
     const obj = new GameObject(levelObj);
     scene.add(obj);
-    obj.setInitVel();
+    obj.give();
     objects.push(obj);
   }
   scoreElement.innerHTML = 'Score: ' + score;
