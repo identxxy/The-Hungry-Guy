@@ -1,4 +1,4 @@
-import { boxtexture } from './texture';
+import { ObjectMaterial } from './texture';
 
 const mouthOpenThreshold = 5;
 const objDefaultLifeTimeMs = 10000;
@@ -8,10 +8,6 @@ const geo_dict = {
     'box': new THREE.BoxGeometry(10, 10, 10)
 }
 
-const mtr_dict = {
-    'box': new THREE.MeshBasicMaterial( {color: 0x00ff00} )
-}
-
 const score_dict = {
     'box': 10
 }
@@ -19,7 +15,7 @@ const score_dict = {
 export class GameObject extends Physijs.BoxMesh{
     constructor(levelObj){
         const name = levelObj.name;
-        super(geo_dict[name], mtr_dict[name]);
+        super(geo_dict[name], ObjectMaterial(name));
         if (Object.keys(geo_dict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
