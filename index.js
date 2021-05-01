@@ -60,6 +60,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
 renderer.setSize(canvasWidth, canvasHeight);
+renderer.antialias = true;
 // faceMesh setting
 let model, faceMesh;
 
@@ -122,10 +123,13 @@ async function setupCamera() {
 }
 
 async function setupLight() {
-  var light = new THREE.DirectionalLight();
-  light.position.set(50, 50, 30);
-  scene.add(light);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    var light = new THREE.DirectionalLight();
+    light.position.set(50, 50, 30);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    var pointLight = new THREE.PointLight("#ffffff");
+    pointLight.position.set(-100, 100, 100);
+    scene.add(pointLight);
 }
 
 async function renderPrediction() {
@@ -269,6 +273,7 @@ async function main() {
   // });
 
   //
+
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
   while (true) {

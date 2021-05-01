@@ -11,6 +11,6 @@ newmtl BananaMtl
 	Ka 0.0000 0.0000 0.0000
 	Kd 0.8000 0.8000 0.8000
 	Ks 0.0600 0.0600 0.0600
-	Ke 0.6400 0.6400 0.6400
-	map_Ka Banana.jpg
-	map_Kd Banana.jpg
+	Ke 0.0000 0.0000 0.0000
+	map_Ka banana/Banana.jpg
+	map_Kd banana/Banana.jpg
