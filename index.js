@@ -18,6 +18,8 @@
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import * as THREE from 'three'
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
@@ -124,6 +126,13 @@ async function setupCamera() {
   });
 }
 
+async function setupLight() {
+    var light = new THREE.DirectionalLight(0xffffff, 0.5);
+    light.position.setScalar(100);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+}
+
 async function renderPrediction() {
 
   const predictions = await model.estimateFaces({
@@ -195,6 +204,8 @@ async function main() {
   document.getElementById('main').appendChild(stats.dom);
   // real camera
   await setupCamera();
+  //set up light
+  await setupLight();
   // game levels
   await loadGameLevels();
   // load texture picture
@@ -216,13 +227,16 @@ async function main() {
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 //try obj
-    var OBJLoader = new THREE.OBJLoader();//obj加载器
-    var MTLLoader = new THREE.MTLLoader();//材质文件加载器
-    MTLLoader.load('./objects_model/Junk_food.mtl', function (materials) {
+    var ObjLoader = new OBJLoader();//obj加载器
+    var MtlLoader = new MTLLoader();//材质文件加载器
+    var haha = require('./objects_model/coffee table OBJ.mtl');
+    var haha1 = require('./objects_model/coffee table OBJ.obj');
+    MtlLoader.load(haha, function (materials) {
         //obj的模型会和MaterialCreator包含的材质对应起来
-        OBJLoader.setMaterials(materials);
-        OBJLoader.load('./objects_model/Junk_food.obj', function (obj) {
-            obj.scale.set(10, 10, 10); //放大obj组对象
+        ObjLoader.setMaterials(materials);
+        ObjLoader.load(haha1, function (obj) {
+            obj.scale.set(0.2, 0.2, 0.2); //放大obj组对象
+            obj.rotateX(PI/6);
             scene.add(obj);//返回的组对象插入场景中
         })
     });

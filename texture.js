@@ -5,7 +5,7 @@ let mtr_dict, facemtr;
 const TEXLoader = new THREE.TextureLoader();
 
 export async function requireAllTextures() {
-    facetexture = require("./textures/face2.jpg");
+    facetexture = require("./textures/face1.jpg");
     boxtexture = require("./textures/test.png");
 }
 
