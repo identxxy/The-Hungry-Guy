@@ -1,0 +1,41 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl cheese01Mat
+Ns 9.803922
+Ka 0.588235 0.588235 0.588235
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd cheese01DiffuseMap.png
+map_Bump cheese01NormalMap.png
+map_Ka cheese01DiffuseMap.png
+
+newmtl cheese02Mat
+Ns 9.803922
+Ka 0.588235 0.588235 0.588235
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd cheese02DiffuseMap.png
+map_Bump cheese02NormalMap.png
+map_Ka cheese02DiffuseMap.png
+
+newmtl cheese03Mat
+Ns 9.803922
+Ka 0.588235 0.588235 0.588235
+Kd 0.588235 0.588235 0.588235
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd cheese03DiffuseMap.png
+map_Bump cheese03NormalMap.png
+map_Ka cheese03DiffuseMap.png

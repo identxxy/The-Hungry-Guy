@@ -18,6 +18,8 @@
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import * as THREE from 'three'
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
@@ -119,6 +121,13 @@ async function setupCamera() {
   });
 }
 
+async function setupLight() {
+    var light = new THREE.DirectionalLight();
+    light.position.set(50, 50, 30);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+}
+
 async function renderPrediction() {
 
   const predictions = await model.estimateFaces({
@@ -190,6 +199,8 @@ async function main() {
   document.getElementById('main').appendChild(stats.dom);
   // real camera
   await setupCamera();
+  //set up light
+  await setupLight();
   // game levels
   await loadGameLevels();
   // load texture picture
@@ -209,7 +220,21 @@ async function main() {
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-
+//try obj
+    var ObjLoader = new OBJLoader();
+    var MtlLoader = new MTLLoader();
+    var haha = 'coffee table OBJ.mtl';
+    var haha1 = 'coffee table OBJ.obj';
+    MtlLoader.load(haha, function (materials) {
+        ObjLoader.setMaterials(materials);
+        ObjLoader.load(haha1, function (obj) {
+            obj.rotateX(-PI / 25);
+            obj.position.set(0, -300, 180);
+            obj.scale.set(0.5, 0.5, 0.5);
+            scene.add(obj);
+        })
+    });
+    //
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
   while (true){

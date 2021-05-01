@@ -65,6 +65,9 @@
       {
         "staticOutDir": "textures",
         "staticPath": "textures"
+      },
+      {
+        "staticPath": "objects_model"
       }
     ]
   }
