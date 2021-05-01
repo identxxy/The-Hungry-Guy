@@ -53,7 +53,7 @@ const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
 const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
 // Physi.js settings
 const scene = new Physijs.Scene();
-scene.setGravity(new THREE.Vector3(0, -10 * myMeter, 0 ));
+scene.setGravity(new THREE.Vector3(0, -10 * myMeter, 0));
 // three.js settings
 const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
@@ -91,7 +91,7 @@ function setupDatGui() {
     muteMusic(val);
   })
   gui.add(state, 'showVideo').onChange(async val => {
-    video.style.display = state.showVideo? 'inline': 'none';
+    video.style.display = state.showVideo ? 'inline' : 'none';
   });
   gui.add(state, 'debug');
   const loadButton = { Reload: function () { console.log("reload levels"); loadGameLevels(); } };
@@ -122,10 +122,10 @@ async function setupCamera() {
 }
 
 async function setupLight() {
-    var light = new THREE.DirectionalLight();
-    light.position.set(50, 50, 30);
-    scene.add(light);
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  var light = new THREE.DirectionalLight();
+  light.position.set(50, 50, 30);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 }
 
 async function renderPrediction() {
@@ -139,35 +139,35 @@ async function renderPrediction() {
 
   if (predictions.length > 0) {
     faceMesh.geometry.dispose();
-      const geometry = new THREE.BufferGeometry();
-      var points = new Float32Array(TRIANGULATION.length * 3);
-      var points_uv = new Float32Array(TRIANGULATION.length * 2);
-      for (var i = 0; i < TRIANGULATION.length; i++) {
-          const index = TRIANGULATION[i];
-          points[i * 3] = (predictions[0].scaledMesh[index].flat())[0];
-          points[i * 3 + 1] = (predictions[0].scaledMesh[index].flat())[1];
-          points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
+    const geometry = new THREE.BufferGeometry();
+    var points = new Float32Array(TRIANGULATION.length * 3);
+    var points_uv = new Float32Array(TRIANGULATION.length * 2);
+    for (var i = 0; i < TRIANGULATION.length; i++) {
+      const index = TRIANGULATION[i];
+      points[i * 3] = (predictions[0].scaledMesh[index].flat())[0];
+      points[i * 3 + 1] = (predictions[0].scaledMesh[index].flat())[1];
+      points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
 
-          points_uv[i * 2] = (UV_COORDS[index])[0];
-          points_uv[i * 2 + 1] = (UV_COORDS[index])[1];
-      }
-      //const points = new Float32Array(predictions[0].scaledMesh.flat());
-      geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
-      geometry.setAttribute('uv', new THREE.BufferAttribute(points_uv, 2));
+      points_uv[i * 2] = (UV_COORDS[index])[0];
+      points_uv[i * 2 + 1] = (UV_COORDS[index])[1];
+    }
+    //const points = new Float32Array(predictions[0].scaledMesh.flat());
+    geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
+    geometry.setAttribute('uv', new THREE.BufferAttribute(points_uv, 2));
     faceMesh.geometry = geometry;
     const annotation = predictions[0].annotations;
     const up = annotation.lipsUpperInner[5];
-      up[0] = videoWidth / 2 - up[0];
-      up[1] = videoHeight / 2 - up[1];
+    up[0] = videoWidth / 2 - up[0];
+    up[1] = videoHeight / 2 - up[1];
     const low = annotation.lipsLowerInner[5];
-      low[0] = videoWidth / 2 - low[0];
-      low[1] = videoHeight / 2 - low[1];
+    low[0] = videoWidth / 2 - low[0];
+    low[1] = videoHeight / 2 - low[1];
     const left = annotation.lipsLowerInner[10];
-      left[0] = videoWidth / 2 - left[0];
-      left[1] = videoHeight / 2 - left[1];
+    left[0] = videoWidth / 2 - left[0];
+    left[1] = videoHeight / 2 - left[1];
     const right = annotation.lipsLowerInner[0];
-      right[0] = videoWidth / 2 - right[0];
-      right[1] = videoHeight / 2 - right[1];
+    right[0] = videoWidth / 2 - right[0];
+    right[1] = videoHeight / 2 - right[1];
     const mouth = {
       up: up,
       low: low,
@@ -218,26 +218,62 @@ async function main() {
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-//try obj
-    var ObjLoader = new OBJLoader();
-    var MtlLoader = new MTLLoader();
-    var haha = 'coffee table OBJ.mtl';
-    var haha1 = 'coffee table OBJ.obj';
-    MtlLoader.load(haha, function (materials) {
-        ObjLoader.setMaterials(materials);
-        ObjLoader.load(haha1, function (obj) {
-            obj.rotateX(-PI / 25);
-            obj.position.set(0, -300, 180);
-            obj.scale.set(0.5, 0.5, 0.5);
-            scene.add(obj);
-        })
-    });
-    //
+  //try obj
+  const ObjLoader = new OBJLoader();
+  const MtlLoader = new MTLLoader();
+
+  const objList = ['food_cheese', 'food_banana'];
+  const objDone = [];
+  let loadIter = 0;
+  function adjustPos(){
+    objDone[0].scale.set(10, 10, 10);
+    objDone[0].scale.set(0.1, 0.1, 0.1);
+  }
+  function loadAll(){
+    MtlLoader.load(objList[loadIter]+'.mtl', mCB);
+  }
+  function mCB(mtr){
+    ObjLoader.setMaterials(mtr);
+    ObjLoader.load(objList[loadIter]+'.obj',oCB);
+  }
+  function oCB(obj){
+    scene.add(obj);
+    objDone.push(obj);
+    loadIter ++;
+    if (loadIter >= objList.length){
+      adjustPos();
+      return;
+    }
+    loadAll();
+  }
+  loadAll();
+  // MtlLoader.load('table.mtl', function (materials) {
+  //   ObjLoader.setMaterials(materials);
+  //   console.log(materials);
+  //   ObjLoader.load('table.obj', function (obj) {
+  //     obj.rotateX(-PI / 25);
+  //     obj.position.set(0, -300, 220);
+  //     obj.scale.set(0.5, 0.5, 0.4);
+  //     scene.add(obj);
+  //     console.log(obj);
+  //     MtlLoader.load('food_banana.mtl', function (materials) {
+  //       ObjLoader.setMaterials(materials);
+  //       console.log(materials);
+  //       ObjLoader.load('food_banana.obj', function (obj) {
+  //         // obj.scale.set(1, 1, 1);
+  //         scene.add(obj);
+  //         console.log(obj);
+  //       });
+  //     });
+  //   });
+  // });
+
+  //
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
-  while (true){
+  while (true) {
     let mouth = await renderPrediction();
-    if (mouth != null) break; 
+    if (mouth != null) break;
   }
   score.innerHTML = "Are YOU Ready?";
   animate();
