@@ -5,8 +5,10 @@ let mtr_dict, facemtr;
 const TEXLoader = new THREE.TextureLoader();
 
 export async function requireAllTextures() {
-    facetexture = require("./textures/face2.jpg");
-    boxtexture = require("./textures/test.png");
+    facetexture = [];
+    for (let i=1 ; i <= 7; ++i)
+        facetexture.push( "textures/face"+i+".jpg");
+    boxtexture = "textures/test.png";
 }
 
 export function loadObjectTexture(){
@@ -16,13 +18,17 @@ export function loadObjectTexture(){
 }
 
 export function loadFaceTexture() {
-    facemtr = new THREE.MeshBasicMaterial({ map: TEXLoader.load(facetexture), side: THREE.BackSide });
+    facemtr = [];
+    facetexture.forEach(element => {
+        facemtr.push(new THREE.MeshBasicMaterial({ map: TEXLoader.load(element), side: THREE.BackSide }));
+    });
 }
 
-export function ObjectMaterial(name) {
+export function objectMaterial(name) {
     return mtr_dict[name];
 }
 
-export function FaceMaterial() {
-    return facemtr;
+export function faceMaterial(i) {
+    if(!i) return facemtr[0]
+    return facemtr[i-1];
 }

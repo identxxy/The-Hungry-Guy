@@ -60,6 +60,12 @@
     "dist/"
   ],
   "staticFiles": {
-    "staticPath": "physijs/static"
+    "staticPath": [
+      "physijs/static",
+      {
+        "staticOutDir": "textures",
+        "staticPath": "textures"
+      }
+    ]
   }
 }

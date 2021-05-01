@@ -27,7 +27,7 @@ import { UV_COORDS } from './uv_coords';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
-import { requireAllTextures, loadObjectTexture, loadFaceTexture, FaceMaterial } from './texture';
+import { requireAllTextures, loadObjectTexture, loadFaceTexture, faceMaterial } from './texture';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -58,7 +58,6 @@ const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
 renderer.setSize(canvasWidth, canvasHeight);
-let faceMaterial;
 // faceMesh setting
 let model, faceMesh;
 
@@ -68,19 +67,17 @@ const mobile = isMobile();
 // stats
 const stats = new Stats();
 const state = {
-  maxFaces: 1,
+  faceType: 1,
   mute: false,
-  showVideo: false,
+  showVideo: true,
   debug: false,
   gameLevel: 1
 };
 
 function setupDatGui() {
   const gui = new dat.GUI();
-  gui.add(state, 'maxFaces', 1, 20, 1).onChange(async val => {
-    model = await faceLandmarksDetection.load(
-      faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-      { maxFaces: val });
+  gui.add(state, 'faceType', 1, 7, 1).onChange(async val => {
+    faceMesh.material = faceMaterial(val);
   });
   gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
     gameChooseLevel(val);
@@ -102,8 +99,6 @@ function setupDatGui() {
 }
 
 async function setupCamera() {
-  video.style.display = 'none';
-
   const stream = await navigator.mediaDevices.getUserMedia({
     'audio': false,
     'video': {
@@ -201,7 +196,6 @@ async function main() {
   await requireAllTextures();
   loadObjectTexture();
   loadFaceTexture();
-  faceMaterial = FaceMaterial();
   // tfjs 
   await tf.setBackend('webgl');
   model = await faceLandmarksDetection.load(
@@ -210,23 +204,12 @@ async function main() {
 
   // three.js camera
   camera.position.z = 500;
-  faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), faceMaterial);
+  faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), faceMaterial());
   faceMesh.rotateZ(PI);
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-//try obj
-    var OBJLoader = new THREE.OBJLoader();//obj加载器
-    var MTLLoader = new THREE.MTLLoader();//材质文件加载器
-    MTLLoader.load('./objects_model/Junk_food.mtl', function (materials) {
-        //obj的模型会和MaterialCreator包含的材质对应起来
-        OBJLoader.setMaterials(materials);
-        OBJLoader.load('./objects_model/Junk_food.obj', function (obj) {
-            obj.scale.set(10, 10, 10); //放大obj组对象
-            scene.add(obj);//返回的组对象插入场景中
-        })
-    });
-    //
+
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
   while (true){

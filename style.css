@@ -21,13 +21,12 @@
 
 #video {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1) translate(50%, -50%);
+    right: -120px;
+    bottom: -120px;
+    -webkit-transform: scale(-0.5, 0.5);
     display: inline;
     width: var(--video-width);
-    height: var(--canvas-height);
+    height: var(--video-height);
 }
 
 #score {
