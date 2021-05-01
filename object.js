@@ -1,4 +1,4 @@
-import { ObjectMaterial } from './texture';
+import { objectMaterial } from './texture';
 import * as THREE from 'three'
 
 
@@ -17,7 +17,7 @@ const score_dict = {
 export class GameObject extends Physijs.BoxMesh{
     constructor(levelObj){
         const name = levelObj.name;
-        super(geo_dict[name], ObjectMaterial(name));
+        super(geo_dict[name], objectMaterial(name));
         if (Object.keys(geo_dict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
@@ -129,7 +129,6 @@ export class GameObject extends Physijs.BoxMesh{
         if (!mouth || this.isEaten)
             return false;
         const zdist = mouth.up[2] - this.position.z;
-        console.log('type: ',this.type, 'distance: ', zdist);
         const ymax = mouth.up[1];
         const ymin = mouth.low[1];
         const xmax = mouth.right[0];
