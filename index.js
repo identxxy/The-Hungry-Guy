@@ -60,6 +60,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: mainCanvas, alpha: true });
 renderer.setClearColor(new THREE.Color(0xffffff));
 renderer.setClearAlpha(0.7);
 renderer.setSize(canvasWidth, canvasHeight);
+renderer.antialias = true;
 // faceMesh setting
 let model, faceMesh;
 
@@ -126,6 +127,9 @@ async function setupLight() {
     light.position.set(50, 50, 30);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    var pointLight = new THREE.PointLight("#ffffff");
+    pointLight.position.set(-100, 100, 100);
+    scene.add(pointLight);
 }
 
 async function renderPrediction() {
@@ -220,21 +224,33 @@ async function main() {
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-//try obj
+
+    //add table
     var ObjLoader = new OBJLoader();
     var MtlLoader = new MTLLoader();
-    var haha = 'coffee table OBJ.mtl';
-    var haha1 = 'coffee table OBJ.obj';
-    MtlLoader.load(haha, function (materials) {
+    
+    MtlLoader.load('table.mtl', function (materials) {
         ObjLoader.setMaterials(materials);
-        ObjLoader.load(haha1, function (obj) {
+
+        console.log(materials);
+        ObjLoader.load('table.obj', function (obj) {
             obj.rotateX(-PI / 25);
-            obj.position.set(0, -300, 180);
-            obj.scale.set(0.5, 0.5, 0.5);
+            obj.position.set(0, -300, 220);
+            obj.scale.set(0.5, 0.5, 0.4);
             scene.add(obj);
-        })
+        });
     });
-    //
+   
+    //try
+    
+    MtlLoader.load('food_pancake.mtl', function (materials) {
+        ObjLoader.setMaterials(materials);
+        ObjLoader.load('food_pancake.obj', function (obj) {
+            obj.scale.set(1500, 1500, 1500);
+            scene.add(obj);
+        });
+    });
+
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
   while (true){
