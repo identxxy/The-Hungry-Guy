@@ -1,19 +1,20 @@
 let facetexture, boxtexture;
 let mtr_dict, facemtr;
+const TEXLoader = new THREE.TextureLoader();
 
 export async function requireAllTextures() {
-    facetexture = require("./textures/test.png");
+    facetexture = require("./textures/face2.jpg");
     boxtexture = require("./textures/test.png");
 }
 
 export function loadObjectTexture(){
     mtr_dict = {
-        'box': new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(boxtexture), side: THREE.DoubleSide })
+        'box': new THREE.MeshBasicMaterial({ map: TEXLoader.load(boxtexture), side: THREE.DoubleSide })
     };
 }
 
 export function loadFaceTexture() {
-    facemtr = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(facetexture), side: THREE.DoubleSide });
+    facemtr = new THREE.MeshBasicMaterial({ map: TEXLoader.load(facetexture), side: THREE.BackSide });
 }
 
 export function ObjectMaterial(name) {

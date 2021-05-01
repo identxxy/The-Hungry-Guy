@@ -22,6 +22,7 @@ import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
 
 import { TRIANGULATION } from './triangulation';
+import { UV_COORDS } from './uv_coords';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
@@ -134,15 +135,20 @@ async function renderPrediction() {
   if (predictions.length > 0) {
     faceMesh.geometry.dispose();
       const geometry = new THREE.BufferGeometry();
-      var points = new Float32Array(TRIANGULATION.length*3);
+      var points = new Float32Array(TRIANGULATION.length * 3);
+      var points_uv = new Float32Array(TRIANGULATION.length * 2);
       for (var i = 0; i < TRIANGULATION.length; i++) {
           const index = TRIANGULATION[i];
           points[i * 3] = (predictions[0].scaledMesh[index].flat())[0];
           points[i * 3 + 1] = (predictions[0].scaledMesh[index].flat())[1];
           points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
+
+          points_uv[i * 2] = (UV_COORDS[index])[0];
+          points_uv[i * 2 + 1] = (UV_COORDS[index])[1];
       }
       //const points = new Float32Array(predictions[0].scaledMesh.flat());
-    geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
+      geometry.setAttribute('position', new THREE.BufferAttribute(points, 3));
+      geometry.setAttribute('uv', new THREE.BufferAttribute(points_uv, 2));
     faceMesh.geometry = geometry;
     const annotation = predictions[0].annotations;
     const up = annotation.lipsUpperInner[5];
@@ -208,7 +214,18 @@ async function main() {
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-
+//try obj
+    var OBJLoader = new THREE.OBJLoader();//obj加载器
+    var MTLLoader = new THREE.MTLLoader();//材质文件加载器
+    MTLLoader.load('./objects_model/Junk_food.mtl', function (materials) {
+        //obj的模型会和MaterialCreator包含的材质对应起来
+        OBJLoader.setMaterials(materials);
+        OBJLoader.load('./objects_model/Junk_food.obj', function (obj) {
+            obj.scale.set(10, 10, 10); //放大obj组对象
+            scene.add(obj);//返回的组对象插入场景中
+        })
+    });
+    //
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
   while (true){
