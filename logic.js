@@ -27,7 +27,11 @@ export function gameReset(scene) {
   level = levels[iLevel - 1];
   playLevelMusic(iLevel - 1);
   // clean up remainning objs
-  if (objects) objects.forEach(obj => { scene.remove(obj) });
+  if (objects) objects.forEach(obj => {
+    scene.remove(obj);
+    if(obj.constraint)
+      scene.removeConstraint(obj.constraint);
+  });
   objects = [];
   iter = 0;
   score = 0;
@@ -46,6 +50,8 @@ export function gameLogic(scene, mouth, state) {
       playSoundEffect(0);
       score += obj.score;
       scene.remove(obj);
+      if(obj.constraint)
+        scene.removeConstraint(obj.constraint);
       objects.splice(i, 1);
     }
     // judge taken
@@ -55,15 +61,18 @@ export function gameLogic(scene, mouth, state) {
     // judge removed
     if (obj.canBeRemoved(timeElasped)) {
       scene.remove(obj);
+      if(obj.constraint)
+        scene.removeConstraint(obj.constraint);
       objects.splice(i, 1);
     }
   }
   // spawn objs
   for (let levelObj = level[iter]; iter < level.length && timeElasped > levelObj.spawnTime; levelObj = level[++iter]) {
-    console.log('spawn ', timeElasped - levelObj.spawnTime);
     console.log('iter ', iter);
     const obj = new GameObject(levelObj);
     scene.add(obj);
+    if (obj.addConstraint())
+      scene.addConstraint(obj.constraint);
     obj.give();
     objects.push(obj);
   }
