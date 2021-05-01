@@ -122,8 +122,8 @@ async function setupCamera() {
 }
 
 async function setupLight() {
-    var light = new THREE.DirectionalLight(0xffffff, 0.5);
-    light.position.setScalar(100);
+    var light = new THREE.DirectionalLight();
+    light.position.set(50, 50, 30);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 }
@@ -221,17 +221,17 @@ async function main() {
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
 //try obj
-    var ObjLoader = new OBJLoader();//obj加载器
-    var MtlLoader = new MTLLoader();//材质文件加载器
-    var haha = require('./objects_model/coffee table OBJ.mtl');
-    var haha1 = require('./objects_model/coffee table OBJ.obj');
+    var ObjLoader = new OBJLoader();
+    var MtlLoader = new MTLLoader();
+    var haha = 'coffee table OBJ.mtl';
+    var haha1 = 'coffee table OBJ.obj';
     MtlLoader.load(haha, function (materials) {
-        //obj的模型会和MaterialCreator包含的材质对应起来
         ObjLoader.setMaterials(materials);
         ObjLoader.load(haha1, function (obj) {
-            obj.scale.set(0.2, 0.2, 0.2); //放大obj组对象
-            obj.rotateX(PI/6);
-            scene.add(obj);//返回的组对象插入场景中
+            obj.rotateX(-PI / 25);
+            obj.position.set(0, -300, 180);
+            obj.scale.set(0.5, 0.5, 0.5);
+            scene.add(obj);
         })
     });
     //
