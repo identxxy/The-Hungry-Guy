@@ -1,4 +1,4 @@
-import { objectMaterial } from './texture';
+import { getGameOBJ } from './loader';
 import * as THREE from 'three'
 
 
@@ -8,7 +8,6 @@ const objDefaultTakenTimeMs = 4000;
 
 const objConfigDict = {
     'box': {
-        geometry: new THREE.BoxGeometry(10, 10, 10),
         score: 10,
         size: 6
     }
@@ -19,8 +18,7 @@ export class GameObject extends Physijs.SphereMesh{
         const name = levelObj.name;
         const config = objConfigDict[name];
         super(new THREE.SphereGeometry(config.size, 8, 8), new THREE.MeshBasicMaterial({opacity: 0.0, transparent:true}));
-        const visualMesh = new THREE.Mesh(config.geometry, objectMaterial(name));
-        this.add(visualMesh);
+        this.add(getGameOBJ(this.name));
         if (Object.keys(objConfigDict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }

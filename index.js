@@ -29,7 +29,7 @@ import { UV_COORDS } from './uv_coords';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
-import { requireAllTextures, loadObjectTexture, loadFaceTexture, faceMaterial } from './texture';
+import { requireAllTextures, getFaceMaterial } from './loader';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -79,7 +79,7 @@ const state = {
 function setupDatGui() {
   const gui = new dat.GUI();
   gui.add(state, 'faceType', 1, 7, 1).onChange(async val => {
-    faceMesh.material = faceMaterial(val);
+    faceMesh.material = getFaceMaterial(val);
   });
   gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
     gameChooseLevel(val);
@@ -205,8 +205,6 @@ async function main() {
   await loadGameLevels();
   // load texture picture
   await requireAllTextures();
-  loadObjectTexture();
-  loadFaceTexture();
   // tfjs 
   await tf.setBackend('webgl');
   model = await faceLandmarksDetection.load(
@@ -215,7 +213,7 @@ async function main() {
 
   // three.js camera
   camera.position.z = 500;
-  faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), faceMaterial());
+  faceMesh = new THREE.Mesh(new THREE.BufferGeometry().setFromPoints([]), getFaceMaterial());
   faceMesh.rotateZ(PI);
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
