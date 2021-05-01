@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 let facetexture, boxtexture;
 let mtr_dict, facemtr;
 

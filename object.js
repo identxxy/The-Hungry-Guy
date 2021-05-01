@@ -1,5 +1,6 @@
-import { getMaxTexturesInShader } from '@tensorflow/tfjs-backend-webgl/dist/webgl_util';
 import { ObjectMaterial } from './texture';
+import * as THREE from 'three'
+
 
 const mouthOpenThreshold = 5;
 const objDefaultLifeTimeMs = 6000;

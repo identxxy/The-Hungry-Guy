@@ -18,6 +18,7 @@
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
+import * as THREE from 'three'
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
 
