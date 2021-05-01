@@ -6,28 +6,31 @@ const mouthOpenThreshold = 5;
 const objDefaultLifeTimeMs = 6000;
 const objDefaultTakenTimeMs = 4000;
 
-const geo_dict = {
-    'box': new THREE.BoxGeometry(10, 10, 10)
+const objConfigDict = {
+    'box': {
+        geometry: new THREE.BoxGeometry(10, 10, 10),
+        score: 10,
+        size: 6
+    }
 }
 
-const score_dict = {
-    'box': 10
-}
-
-export class GameObject extends Physijs.BoxMesh{
+export class GameObject extends Physijs.SphereMesh{
     constructor(levelObj){
         const name = levelObj.name;
-        super(geo_dict[name], objectMaterial(name));
-        if (Object.keys(geo_dict).indexOf(name) === -1){
+        const config = objConfigDict[name];
+        super(new THREE.SphereGeometry(config.size, 8, 8), new THREE.MeshBasicMaterial({opacity: 0.0, transparent:true}));
+        const visualMesh = new THREE.Mesh(config.geometry, objectMaterial(name));
+        this.add(visualMesh);
+        if (Object.keys(objConfigDict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
         // read from file
-        this.name = levelObj.name;
+        this.name = name;
         this.spawnTime = levelObj.spawnTime;
         this.type = levelObj.type;
 
         // implied
-        this.score = score_dict[name];
+        this.score = config.score;
         switch (this.type){
             case 'left':
                 this.position.x = -300;
