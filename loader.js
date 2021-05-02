@@ -12,16 +12,21 @@ const objLoader = new OBJLoader();
 const mtlLoader = new MTLLoader();
 
 const objList = [
-    {name: 'kitchen', scale:0 },
-    {name: 'table', scale:0},
-    {name: 'apple', scale: 10},
-    {name: 'banana', scale: 0.5},
-    {name: 'jelly', scale: 10},
-    {name: 'pancake', scale: 500},
-    {name: 'watermelon', scale: 5},
-    {name: 'chicken', scale: 0.5},
-    {name: 'egg', scale: 10}
-]
+    { name: 'kitchen', scale: 0 },
+    { name: 'table', scale: 0 },
+    { name: 'apple', scale: 10 },
+    { name: 'banana', scale: 0.5 },
+    { name: 'jelly', scale: 10 },
+    { name: 'pancake', scale: 500 },
+    { name: 'watermelon', scale: 5 },
+    { name: 'chicken', scale: 0.5 },
+    { name: 'egg', scale: 10 },
+    { name: 'wrench', scale: 1 },
+    { name: 'iphone', scale: 1 },
+    { name: 'rose', scale: 1 },
+    { name: 'knife', scale: 1 },
+    { name: 'cap', scale: 1 }
+];
 const objDone = [];
 let loadIter = 0;
 
