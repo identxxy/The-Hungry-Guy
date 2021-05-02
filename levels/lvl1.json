@@ -20,7 +20,7 @@
         "type": "down"
     },
     {
-        "name": "banana",
+        "name": "egg",
         "spawnTime": 12300,
         "type": "up"
     },
@@ -65,14 +65,9 @@
         "type": "up"
     },
     {
-        "name": "jelly",
-        "spawnTime": 31200,
-        "type": "down"
-    },
-    {
-        "name": "banana",
+        "name": "egg",
         "spawnTime": 32800,
-        "type": "up"
+        "type": "right"
     },
     {
         "name": "pancake",

@@ -86,9 +86,9 @@
     "type": "up"
   },
   {
-    "name": "jelly",
+    "name": "banana",
     "spawnTime": 23040,
-    "type": "down"
+    "type": "right"
   },
   {
     "name": "rose",
