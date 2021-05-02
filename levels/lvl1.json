@@ -5,7 +5,7 @@
         "type": "left"
     },
     {
-        "name": "egg",
+        "name": "banana",
         "spawnTime": 3800,
         "type": "right"
     },
@@ -45,7 +45,7 @@
         "type": "left"
     },
     {
-        "name": "egg",
+        "name": "apple",
         "spawnTime": 25200,
         "type": "right"
     },
@@ -55,7 +55,7 @@
         "type": "left"
     },
     {
-        "name": "watermelon",
+        "name": "apple",
         "spawnTime": 28000,
         "type": "right"
     },
