@@ -20,7 +20,7 @@
         "type": "down"
     },
     {
-        "name": "chicken",
+        "name": "banana",
         "spawnTime": 12300,
         "type": "up"
     },
@@ -30,7 +30,7 @@
         "type": "down"
     },
     {
-        "name": "chicken",
+        "name": "banana",
         "spawnTime": 18000,
         "type": "up"
     },
@@ -55,12 +55,12 @@
         "type": "left"
     },
     {
-        "name": "watermelon",
+        "name": "apple",
         "spawnTime": 28000,
         "type": "right"
     },
     {
-        "name": "chicken",
+        "name": "banana",
         "spawnTime": 29600,
         "type": "up"
     },

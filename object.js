@@ -136,7 +136,7 @@ export class GameObject extends Physijs.SphereMesh{
             case 'down':
                 giveVel.x = 0;
                 giveVel.y = 0;
-                giveVel.z = -10;
+                giveVel.z = -15;
                 this.constraint.setLimits(-100, 380, -100, 100);
                 this.constraint.setRestitution(0, 0.5);
                 this.setAngularVelocity( new THREE.Vector3(0, Math.random(), 0) );
@@ -160,7 +160,7 @@ export class GameObject extends Physijs.SphereMesh{
     canBeEaten(mouth){
         if (!mouth || this.isEaten)
             return false;
-        const zdist = mouth.up[2] - this.position.z;
+        const zdist = this.position.z;
         const ymax = mouth.up[1];
         const ymin = mouth.low[1];
         const xmax = mouth.right[0];
@@ -168,7 +168,7 @@ export class GameObject extends Physijs.SphereMesh{
         if (ymax - ymin > mouthOpenThreshold &&
             ymax > this.position.y && ymin < this.position.y &&
             xmax > this.position.x && xmin < this.position.x &&
-            (zdist > - 50 || zdist < 50 )
+            zdist < 50 
             ){
             return true;
         }

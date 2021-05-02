@@ -2,7 +2,9 @@ const bgm = document.getElementById('bgm');
 const effect = document.getElementById('soundEffect');
 const loadingMusic = '/bgm/Loading.mp3';
 const soundEffects = [
-    '/effect/eat.wav'
+    '/effect/eat.wav',
+    '/effect/yue.wav',
+    '/effect/ah.wav'
 ];
 
 let lvlMusics;
@@ -31,8 +33,12 @@ export function playLevelMusic(i) {
     bgm.play();
 }
 
-export function playSoundEffect(i){
-    effect.src = soundEffects[i];
+export function playSoundEffect(score){
+    switch (score){
+        case 10: effect.src = soundEffects[0];break;
+        case -10: effect.src = soundEffects[1];break;
+        case -20: effect.src = soundEffects[2];break;
+    }
     effect.play();
 }
 
