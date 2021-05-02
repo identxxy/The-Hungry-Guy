@@ -27,7 +27,7 @@ import { UV_COORDS } from './uv_coords';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
-import { requireAllTextures, getFaceMaterial, loadAllObjects } from './loader';
+import { requireAllTextures, getFaceMaterial, loadAllObjects, objLoader, mtlLoader, getGameOBJ } from './loader';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -50,7 +50,7 @@ const videoHeight = parseInt(docStyle.getPropertyValue('--video-height'), 10);
 const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
 const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
 // Physi.js settings
-const scene = new Physijs.Scene();
+export const scene = new Physijs.Scene();
 scene.setGravity(new THREE.Vector3(0, -10 * myMeter, 0));
 // three.js settings
 const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
@@ -121,8 +121,8 @@ async function setupCamera() {
 }
 
 async function setupLight() {
-    var light = new THREE.DirectionalLight();
-    light.position.set(50, 50, 30);
+    var light = new THREE.PointLight("#ffffff");
+    light.position.set(100, 100, 30);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     var pointLight = new THREE.PointLight("#ffffff");

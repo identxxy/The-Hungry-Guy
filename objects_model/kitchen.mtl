@@ -1,0 +1,115 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 10.02.2020 12:06:58
+
+newmtl wire_086086086
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.3373 0.3373 0.3373
+	Kd 0.3373 0.3373 0.3373
+	Ks 0.0000 0.0000 0.0000
+
+
+newmtl wire_135059008
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.8894 0.7300 0.8400
+	Kd 0.3694 0.2300 0.3104
+	Ks 0.0000 0.0000 0.0000
+
+newmtl wire_088144225
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.9510 0.8510 0.9000
+	Kd 0.3510 0.2510 0.3000
+	Ks 0.0000 0.0000 0.0000
+	map_Ka kitchen/Light_marble.jpg
+	map_Kd kitchen/Light_marble.jpg
+	map_Ks kitchen/Light_marble.jpg
+
+newmtl wire_138008110
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.5412 0.0314 0.4314
+	Kd 0.5412 0.0314 0.4314
+	Ks 0.0000 0.0000 0.0000
+
+newmtl wire_008008136
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.1510 0.1510 0.1510
+	Kd 0.1510 0.1510 0.1510
+	Ks 0.7000 0.7000 0.7000
+	map_Ka kitchen/Brush_metall.png
+	map_Kd kitchen/Brush_metall.png
+
+newmtl wire_006135006
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.8235 0.8294 0.8235
+	Kd 0.8235 0.8294 0.8235
+	Ks 0.0000 0.0000 0.0000
+	map_Ka kitchen/Light_marble.jpg
+	map_Kd kitchen/Light_marble.jpg
+
+newmtl wire_018018018
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.0706 0.0706 0.0706
+	Kd 0.0706 0.0706 0.0706
+	Ks 0.0000 0.0000 0.0000
+
+newmtl wire_127127127
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.4980 0.4980 0.4980
+	Kd 0.4980 0.4980 0.4980
+	Ks 0.0000 0.0000 0.0000
+
+newmtl wire_115115115
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.4510 0.4510 0.4510
+	Kd 0.4510 0.4510 0.4510
+	Ks 0.7000 0.7000 0.7000
+	map_Ka kitchen/Brush_metall.png
+	map_Kd kitchen/Brush_metall.png
+
+
+newmtl wire_000000000
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.4980 0.4980 0.4980
+	Kd 0.4980 0.4980 0.4980
+	Ks 0.7000 0.7000 0.7000
+	map_Ka kitchen/Bosch_Mask.gif
+	map_Kd kitchen/Bosch_Mask.gif
