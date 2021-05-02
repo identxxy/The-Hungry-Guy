@@ -22,7 +22,19 @@ const objConfigDict = {
     'pancake': {
         score: 10,
         size: 6
-    }
+    },
+    'watermelon': {
+        score: 10,
+        size: 6
+    },
+    'egg': {
+        score: 10,
+        size: 6
+    },
+    'chicken': {
+        score: 10,
+        size: 6
+    },
 }
 
 export class GameObject extends Physijs.SphereMesh{
@@ -119,7 +131,7 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.z = 0;
                 this.constraint.setLimits(-100, 200, -100, 100);
                 this.constraint.setRestitution(1.0, 0.5);
-                this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
+                this.setAngularVelocity( new THREE.Vector3(1, 1, 1) );
                 break;
             case 'down':
                 giveVel.x = 0;
@@ -137,7 +149,7 @@ export class GameObject extends Physijs.SphereMesh{
         this.takenAway = true;
         let takeVel = new THREE.Vector3();
         if (this.type == "up"){
-            takeVel.y = 50;
+            takeVel.y = 100;
         }
         else if (this.type == "down"){
             takeVel.z = 50;
