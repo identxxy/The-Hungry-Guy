@@ -5,19 +5,9 @@
     "type": "right"
   },
   {
-    "name": "egg",
-    "spawnTime": 1440,
-    "type": "left"
-  },
-  {
     "name": "banana",
     "spawnTime": 3040,
     "type": "left"
-  },
-  {
-    "name": "egg",
-    "spawnTime": 3400,
-    "type": "right"
   },
   {
     "name": "chicken",
@@ -25,20 +15,11 @@
     "type": "up"
   },
   {
-    "name": "jelly",
-    "spawnTime": 5440,
-    "type": "down"
-  },
-  {
     "name": "watermelon",
     "spawnTime": 6960,
     "type": "left"
   },
-  {
-    "name": "apple",
-    "spawnTime": 7440,
-    "type": "right"
-  },
+
   {
     "name": "wrench",
     "spawnTime": 7580,
@@ -48,11 +29,6 @@
     "name": "banana",
     "spawnTime": 8920,
     "type": "right"
-  },
-  {
-    "name": "pancake",
-    "spawnTime": 9280,
-    "type": "down"
   },
   {
     "name": "rose",
@@ -70,13 +46,8 @@
     "type": "down"
   },
   {
-    "name": "chicken",
-    "spawnTime": 13280,
-    "type": "up"
-  },
-  {
     "name": "knife",
-    "spawnTime": 13720,
+    "spawnTime": 13280,
     "type": "right"
   },
   {
@@ -95,7 +66,7 @@
     "type": "right"
   },
   {
-    "name": "egg",
+    "name": "wrench",
     "spawnTime": 18480,
     "type": "right"
   },
@@ -142,16 +113,6 @@
   {
     "name": "egg",
     "spawnTime": 31200,
-    "type": "left"
-  },
-  {
-    "name": "banana",
-    "spawnTime": 31600,
-    "type": "right"
-  },
-  {
-    "name": "apple",
-    "spawnTime": 32000,
     "type": "left"
   },
   {

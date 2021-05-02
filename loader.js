@@ -21,10 +21,10 @@ const objList = [
     { name: 'watermelon', scale: 5 },
     { name: 'chicken', scale: 0.4 },
     { name: 'egg', scale: 10 },
-    { name: 'wrench', scale: 10 },
+    { name: 'wrench', scale: 20 },
     { name: 'iphone', scale: 0.5 },
     { name: 'rose', scale: 1.5 },
-    { name: 'knife', scale: 20 },
+    { name: 'knife', scale: 25 },
     { name: 'cap', scale: 5 }
 ];
 const objDone = [];

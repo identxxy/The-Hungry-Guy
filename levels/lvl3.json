@@ -1,12 +1,167 @@
 [
-    {
-        "name": "box",
-        "spawnTime": 1000,
-        "type": "up"
-    },
-    {
-        "name": "box",
-        "spawnTime": 3000,
-        "type": "down"
-    }
+  {
+    "name": "apple",
+    "spawnTime": 1080,
+    "type": "right"
+  },
+  {
+    "name": "egg",
+    "spawnTime": 1440,
+    "type": "left"
+  },
+  {
+    "name": "banana",
+    "spawnTime": 3040,
+    "type": "left"
+  },
+  {
+    "name": "wrench",
+    "spawnTime": 3400,
+    "type": "right"
+  },
+  {
+    "name": "chicken",
+    "spawnTime": 5080,
+    "type": "up"
+  },
+  {
+    "name": "jelly",
+    "spawnTime": 5440,
+    "type": "down"
+  },
+  {
+    "name": "watermelon",
+    "spawnTime": 6960,
+    "type": "left"
+  },
+  {
+    "name": "apple",
+    "spawnTime": 7440,
+    "type": "right"
+  },
+  {
+    "name": "banana",
+    "spawnTime": 8920,
+    "type": "right"
+  },
+  {
+    "name": "pancake",
+    "spawnTime": 9280,
+    "type": "down"
+  },
+  {
+    "name": "rose",
+    "spawnTime": 10880,
+    "type": "right"
+  },
+  {
+    "name": "iphone",
+    "spawnTime": 11320,
+    "type": "left"
+  },
+  {
+    "name": "pancake",
+    "spawnTime": 12880,
+    "type": "down"
+  },
+  {
+    "name": "chicken",
+    "spawnTime": 13280,
+    "type": "up"
+  },
+  {
+    "name": "knife",
+    "spawnTime": 13720,
+    "type": "right"
+  },
+  {
+    "name": "cap",
+    "spawnTime": 15480,
+    "type": "up"
+  },
+  {
+    "name": "apple",
+    "spawnTime": 16680,
+    "type": "left"
+  },
+  {
+    "name": "watermelon",
+    "spawnTime": 17080,
+    "type": "right"
+  },
+  {
+    "name": "egg",
+    "spawnTime": 18480,
+    "type": "right"
+  },
+  {
+    "name": "banana",
+    "spawnTime": 19120,
+    "type": "right"
+  },
+  {
+    "name": "pancake",
+    "spawnTime": 20680,
+    "type": "down"
+  },
+  {
+    "name": "iphone",
+    "spawnTime": 21600,
+    "type": "up"
+  },
+  {
+    "name": "jelly",
+    "spawnTime": 23040,
+    "type": "down"
+  },
+  {
+    "name": "rose",
+    "spawnTime": 23840,
+    "type": "right"
+  },
+  {
+    "name": "apple",
+    "spawnTime": 25320,
+    "type": "left"
+  },
+  {
+    "name": "chicken",
+    "spawnTime": 27360,
+    "type": "up"
+  },
+  {
+    "name": "cap",
+    "spawnTime": 29240,
+    "type": "left"
+  },
+  {
+    "name": "egg",
+    "spawnTime": 31200,
+    "type": "left"
+  },
+  {
+    "name": "banana",
+    "spawnTime": 31600,
+    "type": "right"
+  },
+  {
+    "name": "apple",
+    "spawnTime": 32000,
+    "type": "left"
+  },
+  {
+    "name": "jelly",
+    "spawnTime": 32440,
+    "type": "down"
+  },
+  {
+    "name": "watermelon",
+    "spawnTime": 33360,
+    "type": "left"
+  },
+  {
+    "name": "chicken",
+    "spawnTime": 35280,
+    "type": "right"
+  }
 ]
