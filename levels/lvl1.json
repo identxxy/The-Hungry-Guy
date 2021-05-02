@@ -1,21 +1,21 @@
 [
     {
-        "name": "box",
+        "name": "apple",
         "spawnTime": 1000,
         "type": "left"
     },
     {
-        "name": "box",
+        "name": "banana",
         "spawnTime": 3000,
         "type": "right"
     },
     {
-        "name": "box",
+        "name": "jelly",
         "spawnTime": 5000,
         "type": "down"
     },
     {
-        "name": "box",
+        "name": "pancake",
         "spawnTime": 7000,
         "type": "up"
     }

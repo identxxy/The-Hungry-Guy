@@ -7,7 +7,19 @@ const objDefaultLifeTimeMs = 6000;
 const objDefaultTakenTimeMs = 4000;
 
 const objConfigDict = {
-    'box': {
+    'apple': {
+        score: 10,
+        size: 6
+    },
+    'banana': {
+        score: 10,
+        size: 6
+    },
+    'jelly': {
+        score: 10,
+        size: 6
+    },
+    'pancake': {
         score: 10,
         size: 6
     }
@@ -17,11 +29,15 @@ export class GameObject extends Physijs.SphereMesh{
     constructor(levelObj){
         const name = levelObj.name;
         const config = objConfigDict[name];
-        super(new THREE.SphereGeometry(config.size, 8, 8), new THREE.MeshBasicMaterial({opacity: 0.0, transparent:true}));
-        this.add(getGameOBJ(this.name));
+        super(new THREE.SphereGeometry(config.size, 8, 8), new THREE.MeshBasicMaterial({ opacity: 0.0, transparent: true }));
+        this.visualMesh = new THREE.Object3D();
+        let group = getGameOBJ(name);
+        group.children.forEach((element) => { this.visualMesh.add(element.clone()); });
+        this.visualMesh.scale.set(group.scale.x, group.scale.y, group.scale.z);
         if (Object.keys(objConfigDict).indexOf(name) === -1){
             console.error('invalid object name:', name, 'at GameObject constructor');
         }
+        this.add(this.visualMesh);
         // read from file
         this.name = name;
         this.spawnTime = levelObj.spawnTime;

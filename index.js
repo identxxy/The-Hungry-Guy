@@ -18,8 +18,6 @@
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import Stats from 'stats.js';
 import * as tf from '@tensorflow/tfjs-core';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import * as THREE from 'three'
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-cpu';
@@ -29,7 +27,7 @@ import { UV_COORDS } from './uv_coords';
 
 import { loadGameLevels, gameLogic, gameReset, gameChooseLevel } from './logic';
 import { playLoadingMusic, muteMusic } from './audio';
-import { requireAllTextures, getFaceMaterial } from './loader';
+import { requireAllTextures, getFaceMaterial, loadAllObjects } from './loader';
 
 const NUM_KEYPOINTS = 468;
 const NUM_IRIS_KEYPOINTS = 5;
@@ -222,35 +220,8 @@ async function main() {
   faceMesh.position.x = videoWidth / 2;
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
-  //try obj
-  const ObjLoader = new OBJLoader();
-  const MtlLoader = new MTLLoader();
-
-  const objList = ['food_cheese', 'food_banana'];
-  const objDone = [];
-  let loadIter = 0;
-  function adjustPos(){
-    objDone[0].scale.set(10, 10, 10);
-    objDone[0].scale.set(0.1, 0.1, 0.1);
-  }
-  function loadAll(){
-    MtlLoader.load(objList[loadIter]+'.mtl', mCB);
-  }
-  function mCB(mtr){
-    ObjLoader.setMaterials(mtr);
-    ObjLoader.load(objList[loadIter]+'.obj',oCB);
-  }
-  function oCB(obj){
-    scene.add(obj);
-    objDone.push(obj);
-    loadIter ++;
-    if (loadIter >= objList.length){
-      adjustPos();
-      return;
-    }
-    loadAll();
-  }
-  loadAll();
+  //load all objs
+  loadAllObjects();
   // MtlLoader.load('table.mtl', function (materials) {
   //   ObjLoader.setMaterials(materials);
   //   console.log(materials);
