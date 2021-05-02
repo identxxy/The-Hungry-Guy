@@ -12,9 +12,9 @@ let score;
 export function loadGameLevels() {
   loadLevelAudios();
   levels = [];
-  levels.push( require('./levels/lvl1.json') );
-  levels.push( require('./levels/lvl2.json') );
-  levels.push( require('./levels/lvl3.json') );
+  levels.push( 'lvl1.json' );
+  levels.push( 'lvl2.json' );
+  levels.push( 'lvl3.json' );
 }
 
 export function gameChooseLevel(lvl) {
@@ -24,8 +24,10 @@ export function gameChooseLevel(lvl) {
   startTime = null;
 }
 
-export function gameReset(scene) {
-  level = levels[iLevel - 1];
+export async function gameReset(scene) {
+  const response = await fetch(levels[iLevel-1]);
+  level = await response.json();
+  // level = JSON.parselevels[iLevel - 1];
   playLevelMusic(iLevel - 1);
   // clean up remainning objs
   if (objects) objects.forEach(obj => {
