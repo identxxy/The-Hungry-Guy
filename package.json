@@ -65,7 +65,7 @@
       "music",
       {
         "staticPath":"levels",
-        "watcherGlob": "**"
+        "watcherGlob": "*.json"
       },
       {
         "staticOutDir": "textures",

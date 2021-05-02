@@ -148,7 +148,7 @@ async function renderPrediction() {
       const index = TRIANGULATION[i];
       points[i * 3] = (predictions[0].scaledMesh[index].flat())[0];
       points[i * 3 + 1] = (predictions[0].scaledMesh[index].flat())[1];
-      points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
+      // points[i * 3 + 2] = (predictions[0].scaledMesh[index].flat())[2];
 
       points_uv[i * 2] = (UV_COORDS[index])[0];
       points_uv[i * 2 + 1] = (UV_COORDS[index])[1];
