@@ -1,14 +1,18 @@
 import * as THREE from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import {scene} from './index'
+import { load } from '@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh';
+
+const PI = 3.1415926;
 
 let faceMaterial;
 const texLoader = new THREE.TextureLoader();
-const objLoader = new OBJLoader();
-const mtlLoader = new MTLLoader();
+export const objLoader = new OBJLoader();
+export const mtlLoader = new MTLLoader();
 
 
-const objList = ['apple', 'banana', 'jelly', 'pancake'];
+const objList = ['kitchen', 'table', 'apple', 'banana', 'jelly', 'pancake'];
 const objDone = [];
 let loadIter = 0;
 
@@ -45,6 +49,8 @@ function mCB(mtr) {
 }
 function oCB(obj) {
     console.log("done ", loadIter, " O");
+    if ((loadIter == 0)|| (loadIter == 1))
+        scene.add(obj);
     objDone.push(obj);
     loadIter++;
     if (loadIter >= objList.length) {
@@ -55,8 +61,18 @@ function oCB(obj) {
 }
 
 function adjustPos() {
-    objDone[0].scale.set(10, 10, 10);
-    objDone[1].scale.set(0.5, 0.5, 0.5);
+    //kitchen
+    objDone[0].rotateX(PI / 30);
+    objDone[0].position.set(-2300, -600, -1100);
+    objDone[0].scale.set(0.6, 0.6, 0.2);
+    //table
+    objDone[1].rotateX(-PI / 25);
+    objDone[1].position.set(0, -300, 220);
+    objDone[1].scale.set(0.5, 0.5, 0.4);
+
     objDone[2].scale.set(10, 10, 10);
-    objDone[3].scale.set(1000, 1000, 1000);
+    objDone[3].scale.set(0.5, 0.5, 0.5);
+    objDone[4].scale.set(10, 10, 10);
+    objDone[5].scale.set(1000, 1000, 1000);
+
 }

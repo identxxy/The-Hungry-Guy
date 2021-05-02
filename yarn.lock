@@ -3555,6 +3555,13 @@ imurmurhash@^0.1.4:
   resolved "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
+index@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/index/-/index-0.4.0.tgz#e9a6b1c8404f2aa8b44f52c6edd4805c70c1cf75"
+  integrity sha1-6aaxyEBPKqi0T1LG7dSAXHDBz3U=
+  dependencies:
+    step ">= 0.0.4"
+
 indexes-of@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/indexes-of/-/indexes-of-1.0.1.tgz#f30f716c8e2bd346c7b67d3df3915566a7c05607"
@@ -5809,6 +5816,11 @@ stealthy-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
+
+"step@>= 0.0.4":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/step/-/step-1.0.0.tgz#b300e9d2ae9057d4d78633aae2303813a94bdff2"
+  integrity sha1-swDp0q6QV9TXhjOq4jA4E6lL3/I=
 
 stream-browserify@^2.0.1:
   version "2.0.2"
