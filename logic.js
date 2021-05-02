@@ -14,6 +14,7 @@ export function loadGameLevels() {
   levels = [];
   levels.push( require('./levels/lvl1.json') );
   levels.push( require('./levels/lvl2.json') );
+  levels.push( require('./levels/lvl3.json') );
 }
 
 export function gameChooseLevel(lvl) {

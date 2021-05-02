@@ -80,7 +80,7 @@ function setupDatGui() {
   gui.add(state, 'faceType', 1, 7, 1).onChange(async val => {
     faceMesh.material = getFaceMaterial(val);
   });
-  gui.add(state, 'gameLevel', 1, 2, 1).onChange(async val => {
+  gui.add(state, 'gameLevel', 1, 3, 1).onChange(async val => {
     gameChooseLevel(val);
   });
   // initial choice
@@ -222,28 +222,6 @@ async function main() {
   scene.add(faceMesh);
   //load all objs
   loadAllObjects();
-  // MtlLoader.load('table.mtl', function (materials) {
-  //   ObjLoader.setMaterials(materials);
-  //   console.log(materials);
-  //   ObjLoader.load('table.obj', function (obj) {
-  //     obj.rotateX(-PI / 25);
-  //     obj.position.set(0, -300, 220);
-  //     obj.scale.set(0.5, 0.5, 0.4);
-  //     scene.add(obj);
-  //     console.log(obj);
-  //     MtlLoader.load('food_banana.mtl', function (materials) {
-  //       ObjLoader.setMaterials(materials);
-  //       console.log(materials);
-  //       ObjLoader.load('food_banana.obj', function (obj) {
-  //         // obj.scale.set(1, 1, 1);
-  //         scene.add(obj);
-  //         console.log(obj);
-  //       });
-  //     });
-  //   });
-  // });
-
-  //
 
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";

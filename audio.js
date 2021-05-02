@@ -5,13 +5,13 @@ const soundEffects = [
     require('./music/effect/eat.wav')
 ];
 
-
 let lvlMusics;
 
 export function loadLevelAudios() {
     lvlMusics = [];
     lvlMusics.push(require('./music/bgm/lvl1.mp3'));
     lvlMusics.push(require('./music/bgm/lvl2.mp3'));
+    lvlMusics.push(require('./music/bgm/lvl3.mp3'));
     effect.loop = false;
 }
 

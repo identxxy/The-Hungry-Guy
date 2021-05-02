@@ -1,0 +1,12 @@
+[
+    {
+        "name": "box",
+        "spawnTime": 1000,
+        "type": "up"
+    },
+    {
+        "name": "box",
+        "spawnTime": 3000,
+        "type": "down"
+    }
+]

@@ -105,11 +105,13 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.x = 5;
                 giveVel.y = 5;
                 giveVel.z = -5;
+                this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
                 break;
             case 'right':
                 giveVel.x = -5;
                 giveVel.y = 5;
                 giveVel.z = -5;
+                this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
                 break;
             case 'up':
                 giveVel.x = 0;
@@ -117,6 +119,7 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.z = 0;
                 this.constraint.setLimits(-100, 200, -100, 100);
                 this.constraint.setRestitution(1.0, 0.5);
+                this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
                 break;
             case 'down':
                 giveVel.x = 0;
@@ -124,10 +127,10 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.z = -10;
                 this.constraint.setLimits(-100, 400, -100, 100);
                 this.constraint.setRestitution(0, 0.5);
+                this.setAngularVelocity( new THREE.Vector3(0, Math.random(), 0) );
                 break;
         }
         this.setLinearVelocity( giveVel.multiplyScalar(myMeter) );
-        this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
     }
 
     take(){
