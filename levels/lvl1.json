@@ -5,9 +5,14 @@
         "type": "left"
     },
     {
-        "name": "banana",
-        "spawnTime": 3000,
+        "name": "egg",
+        "spawnTime": 4000,
         "type": "right"
+    },
+    {
+        "name": "chicken",
+        "spawnTime": 5000,
+        "type": "down"
     },
     {
         "name": "jelly",
@@ -15,8 +20,18 @@
         "type": "down"
     },
     {
-        "name": "pancake",
+        "name": "watermelon",
         "spawnTime": 7000,
+        "type": "left"
+    },
+    {
+        "name": "chicken",
+        "spawnTime": 9000,
         "type": "up"
+    },
+    {
+        "name": "egg",
+        "spawnTime": 11000,
+        "type": "right"
     }
 ]
