@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import {scene} from './index'
-import { load } from '@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh';
+
 
 const PI = 3.1415926;
 
@@ -12,6 +12,8 @@ const objLoader = new OBJLoader();
 const mtlLoader = new MTLLoader();
 
 const objList = [
+    {name: 'kitchen', scale:0 },
+    {name: 'table', scale:0},
     {name: 'apple', scale: 10},
     {name: 'banana', scale: 0.5},
     {name: 'jelly', scale: 10},
@@ -54,7 +56,20 @@ function mCB(mtr) {
 }
 function oCB(obj) {
     let s = objList[loadIter].scale;
-    obj.scale.set(s, s, s);
+    if (loadIter == 0) {
+        obj.rotateX(PI / 30);
+        obj.position.set(-2300, -600, -1100);
+        obj.scale.set(0.6, 0.6, 0.2);
+        scene.add(obj);
+    }
+    else if (loadIter == 1) {
+        obj.rotateX(-PI / 25);
+        obj.position.set(0, -300, 220);
+        obj.scale.set(0.5, 0.5, 0.4);
+        scene.add(obj);
+    }
+    else
+        obj.scale.set(s, s, s);
     objDone.push(obj);
     loadIter++;
     if (loadIter >= objList.length) {
