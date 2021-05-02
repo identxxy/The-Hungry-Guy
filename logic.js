@@ -50,8 +50,9 @@ export function gameLogic(scene, mouth, state) {
     const obj = objects[i];
     // judge eaten
     if (obj.canBeEaten(mouth)) {
-      playSoundEffect(0);
-      score += obj.score;
+      const objScore = obj.score;
+      score += objScore;
+      playSoundEffect(objScore);
       scene.remove(obj);
       if(obj.constraint)
         scene.removeConstraint(obj.constraint);

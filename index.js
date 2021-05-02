@@ -199,6 +199,7 @@ async function main() {
   setupDatGui();
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
   document.getElementById('main').appendChild(stats.dom);
+  loadAllObjects();
   // real camera
   await setupCamera();
   //set up light
@@ -221,7 +222,6 @@ async function main() {
   faceMesh.position.y = videoHeight / 2;
   scene.add(faceMesh);
   //load all objs
-  loadAllObjects();
 
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
