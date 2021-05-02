@@ -44,4 +44,5 @@ export function playSoundEffect(score){
 
 export function muteMusic(muted) {
     bgm.muted = muted;
+    effect.muted = muted;
 }
