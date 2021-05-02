@@ -1,26 +1,35 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
 newmtl phong1SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
+Ns 18.000005
+Ka 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
 map_Kd texture-green-paper-pattern-scratch-background-photo-hd-wallpaper.jpg
-Ni 1.00
-Ks 0.50 0.50 0.50
-Ns 18.00
+
 newmtl phong2SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
+Ns 0.000000
+Ka 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
 map_Kd grass_texture225.jpg
-Ni 1.00
-Ks 0.00 0.00 0.00
-Ns 0.00
+
 newmtl phongE1SG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
+Ns 0.000000
+Ka 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
 map_Kd wildtextures-leather-Campo-rose.jpg
-Ni 1.00
-Ks 0.50 0.50 0.50

@@ -27,12 +27,32 @@ const objConfigDict = {
         score: 10,
         size: 6
     },
+    'chicken': {
+        score: 10,
+        size: 6
+    },
     'egg': {
         score: 10,
         size: 6
     },
-    'chicken': {
-        score: 10,
+    'wrench': {
+        score: -20,
+        size: 6
+    },
+    'iphone': {
+        score: -10,
+        size: 6
+    },
+    'rose': {
+        score: -10,
+        size: 6
+    },
+    'knife': {
+        score: -20,
+        size: 6
+    },
+    'cap': {
+        score: -10,
         size: 6
     },
 }

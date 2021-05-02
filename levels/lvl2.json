@@ -1,12 +1,27 @@
 [
     {
-        "name": "box",
+        "name": "wrench",
         "spawnTime": 1000,
+        "type": "left"
+    },
+    {
+        "name": "iphone",
+        "spawnTime": 2000,
         "type": "up"
     },
     {
-        "name": "box",
+        "name": "rose",
         "spawnTime": 3000,
+        "type": "right"
+    },
+    {
+        "name": "knife",
+        "spawnTime": 4000,
         "type": "down"
+    },
+    {
+        "name": "cap",
+        "spawnTime": 5000,
+        "type": "up"
     }
 ]
