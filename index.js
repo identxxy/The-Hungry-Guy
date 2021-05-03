@@ -50,7 +50,7 @@ const videoHeight = parseInt(docStyle.getPropertyValue('--video-height'), 10);
 const canvasWidth = parseInt(docStyle.getPropertyValue('--canvas-width'), 10);
 const canvasHeight = parseInt(docStyle.getPropertyValue('--canvas-height'), 10);
 // Physi.js settings
-export const scene = new Physijs.Scene();
+const scene = new Physijs.Scene();
 scene.setGravity(new THREE.Vector3(0, -10 * myMeter, 0));
 // three.js settings
 const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 2000);
@@ -184,13 +184,31 @@ async function renderPrediction() {
 
 async function animate() {
   stats.begin();
-  const mouth = await renderPrediction();
+  // const mouth = await renderPrediction();
+  const mouth = null;
   gameLogic(scene, mouth, state);
   scene.simulate();
   renderer.render(scene, camera);
   stats.end();
   rafID = requestAnimationFrame(animate);
 }
+
+function loadScene(){
+  const tableMaterial = Physijs.createMaterial(
+    new THREE.MeshBasicMaterial({color: 0x00ff00, transparent:true, opacity: 0.0}),
+    0.5,
+    1
+  );
+  const tableCollision = new Physijs.BoxMesh(
+    new THREE.BoxGeometry(500, 1, 600),
+    tableMaterial
+  );
+  tableCollision.position.z = 200
+  tableCollision.position.y = -110;
+  tableCollision.mass = 0;
+  scene.add(tableCollision);
+}
+
 
 async function main() {
   // bgm
@@ -199,7 +217,8 @@ async function main() {
   setupDatGui();
   stats.showPanel(0);  // 0: fps, 1: ms, 2: mb, 3+: custom
   document.getElementById('main').appendChild(stats.dom);
-  loadAllObjects();
+  loadAllObjects(scene);
+  loadScene();
   // real camera
   await setupCamera();
   //set up light
@@ -209,10 +228,10 @@ async function main() {
   // load texture picture
   await requireAllTextures();
   // tfjs 
-  await tf.setBackend('webgl');
-  model = await faceLandmarksDetection.load(
-    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-    { maxFaces: state.maxFaces });
+  // await tf.setBackend('webgl');
+  // model = await faceLandmarksDetection.load(
+  //   faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+  //   { maxFaces: state.maxFaces });
 
   // three.js camera
   camera.position.z = 500;
@@ -225,10 +244,10 @@ async function main() {
 
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
-  while (true) {
-    let mouth = await renderPrediction();
-    if (mouth != null) break;
-  }
+  // while (true) {
+  //   let mouth = await renderPrediction();
+  //   if (mouth != null) break;
+  // }
   score.innerHTML = "Are YOU Ready?";
   animate();
 

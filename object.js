@@ -61,7 +61,12 @@ export class GameObject extends Physijs.SphereMesh{
     constructor(levelObj){
         const name = levelObj.name;
         const config = objConfigDict[name];
-        super(new THREE.SphereGeometry(config.size, 8, 8), new THREE.MeshBasicMaterial({ opacity: 0.0, transparent: true }));
+        const mtr = Physijs.createMaterial(
+            new THREE.MeshBasicMaterial({ opacity: 0.0, transparent: true }),
+            0.9,
+            1
+        );
+        super(new THREE.SphereGeometry(config.size, 8, 8), mtr);
         this.visualMesh = new THREE.Object3D();
         let group = getGameOBJ(name);
         group.children.forEach((element) => { this.visualMesh.add(element.clone()); });
@@ -151,7 +156,7 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.z = 0;
                 this.constraint.setLimits(-100, 200, -100, 100);
                 this.constraint.setRestitution(1.0, 0.5);
-                this.setAngularVelocity( new THREE.Vector3(1, 1, 1) );
+                this.setAngularVelocity( new THREE.Vector3(Math.random(), Math.random(), Math.random()) );
                 break;
             case 'down':
                 giveVel.x = 0;
