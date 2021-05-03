@@ -27,3 +27,5 @@ Otherwise the game may stuck when adding big scene objects.
 
 **Have Fun!**
 
+![](demo.gif)
+
