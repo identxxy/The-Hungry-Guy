@@ -184,8 +184,8 @@ async function renderPrediction() {
 
 async function animate() {
   stats.begin();
-  // const mouth = await renderPrediction();
-  const mouth = null;
+  const mouth = await renderPrediction();
+  // const mouth = null;
   gameLogic(scene, mouth, state);
   scene.simulate();
   renderer.render(scene, camera);
@@ -228,10 +228,10 @@ async function main() {
   // load texture picture
   await requireAllTextures();
   // tfjs 
-  // await tf.setBackend('webgl');
-  // model = await faceLandmarksDetection.load(
-  //   faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-  //   { maxFaces: state.maxFaces });
+  await tf.setBackend('webgl');
+  model = await faceLandmarksDetection.load(
+    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+    { maxFaces: state.maxFaces });
 
   // three.js camera
   camera.position.z = 500;
@@ -244,10 +244,10 @@ async function main() {
 
   score = document.getElementById("score");
   score.innerHTML = "Detecting face...";
-  // while (true) {
-  //   let mouth = await renderPrediction();
-  //   if (mouth != null) break;
-  // }
+  while (true) {
+    let mouth = await renderPrediction();
+    if (mouth != null) break;
+  }
   score.innerHTML = "Are YOU Ready?";
   animate();
 
