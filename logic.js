@@ -41,10 +41,9 @@ export async function gameReset(scene) {
   startTime = new Date().getTime();
 }
 
-export function gameLogic(scene, mouth, state) {
+export function gameLogic(scene, mouth) {
   if (!startTime) return;
   let timeElasped = new Date().getTime() - startTime;
-  if (state.debug) console.log('time gone: ', timeElasped);
   // for each obj
   for (let i = 0; i < objects.length; ++i) {
     const obj = objects[i];

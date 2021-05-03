@@ -71,7 +71,6 @@ const state = {
   faceType: 1,
   mute: false,
   showVideo: true,
-  debug: false,
   gameLevel: 1
 };
 
@@ -92,9 +91,6 @@ function setupDatGui() {
   gui.add(state, 'showVideo').onChange(async val => {
     video.style.display = state.showVideo ? 'inline' : 'none';
   });
-  gui.add(state, 'debug');
-  const loadButton = { Reload: function () { console.log("reload levels"); loadGameLevels(); } };
-  gui.add(loadButton, 'Reload');
   const startButton = { Start: function () { console.log("game start!"); gameReset(scene); } };
   gui.add(startButton, 'Start');
 }
@@ -186,7 +182,7 @@ async function animate() {
   stats.begin();
   const mouth = await renderPrediction();
   // const mouth = null;
-  gameLogic(scene, mouth, state);
+  gameLogic(scene, mouth);
   scene.simulate();
   renderer.render(scene, camera);
   stats.end();
