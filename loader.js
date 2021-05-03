@@ -71,6 +71,7 @@ function adjustScene() {
     let obj = objDone[0];
     // obj.rotateX(Math.PI / 30);
     // obj.scale.set(0.6, 0.6, 0.2);
+    obj.position.z = 50;
     _scene.add(obj);
     // obj = objDone[1];
     // obj.rotateX(-Math.PI / 25);

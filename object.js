@@ -63,8 +63,8 @@ export class GameObject extends Physijs.SphereMesh{
         const config = objConfigDict[name];
         const mtr = Physijs.createMaterial(
             new THREE.MeshBasicMaterial({ opacity: 0.0, transparent: true }),
-            0.9,
-            1
+            0.2,
+            0.2
         );
         super(new THREE.SphereGeometry(config.size, 8, 8), mtr);
         this.visualMesh = new THREE.Object3D();
@@ -162,7 +162,7 @@ export class GameObject extends Physijs.SphereMesh{
                 giveVel.x = 0;
                 giveVel.y = 0;
                 giveVel.z = -15;
-                this.constraint.setLimits(-100, 380, -100, 100);
+                this.constraint.setLimits(-100, 370, -100, 100);
                 this.constraint.setRestitution(0, 0.5);
                 this.setAngularVelocity( new THREE.Vector3(0, Math.random(), 0) );
                 break;

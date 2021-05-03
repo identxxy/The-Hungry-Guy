@@ -197,7 +197,7 @@ function loadScene(){
   const tableMaterial = Physijs.createMaterial(
     new THREE.MeshBasicMaterial({color: 0x00ff00, transparent:true, opacity: 0.0}),
     0.5,
-    1
+    0.2
   );
   const tableCollision = new Physijs.BoxMesh(
     new THREE.BoxGeometry(500, 1, 600),
